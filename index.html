@@ -35,21 +35,24 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
 
         .app-window {
             background-color: var(--bg-card);
             width: 100vw;
             height: 100vh;
-            max-width: 1300px;
-            max-height: 900px;
+            max-width: 1400px;
+            max-height: 850px;
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 158, 11, 0.1);
             border: 1px solid var(--divider);
             display: flex;
             flex-direction: column;
-            padding: 40px;
+            padding: 35px;
             overflow: hidden;
+            z-index: 2; /* Garante que fica acima do fundo mas abaixo dos confetes */
         }
 
         header {
@@ -57,17 +60,17 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            padding-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 2px dashed var(--divider);
         }
 
         .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 900;
             letter-spacing: 2px;
             color: var(--text-main);
@@ -84,7 +87,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px 0;
+            overflow: hidden;
         }
 
         #painelInicial {
@@ -99,17 +102,29 @@
 
         #painelJogo {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             height: 100%;
+            display: flex;
+            gap: 30px;
+            overflow: hidden;
+            padding: 20px 0;
         }
 
-        .sorteio-section {
+        .coluna-esquerda {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: auto;
+            justify-content: center;
+            border-right: 2px dashed var(--divider);
+            padding-right: 15px;
+        }
+
+        .coluna-direita {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-left: 15px;
+            overflow: hidden;
         }
 
         #rodadaTexto {
@@ -118,23 +133,23 @@
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
 
         .bola-bingo {
-            width: 160px;
-            height: 160px;
+            width: 180px;
+            height: 180px;
             background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f8fafc 25%, #cbd5e1 75%, #94a3b8 100%);
             border: 6px solid var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 68px;
+            font-size: 76px;
             font-weight: 900;
             color: var(--ball-text);
             box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             transition: transform 0.15s ease;
         }
 
@@ -156,7 +171,7 @@
             border-radius: 20px;
             border: 1px solid var(--divider);
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             letter-spacing: 0.05em;
         }
         
@@ -170,14 +185,14 @@
             font-style: italic;
             color: var(--text-muted);
             min-height: 22px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         button {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
             color: var(--text-main);
             border: none;
-            padding: 16px 40px;
+            padding: 18px 45px;
             font-size: 18px;
             font-weight: 700;
             border-radius: 14px;
@@ -203,57 +218,65 @@
             filter: none;
         }
 
-        .historico-section {
-            width: 100%;
-            border-top: 2px dashed var(--divider);
-            padding-top: 25px;
-            margin-top: auto;
-        }
-
-        .historico-section h3 {
+        .coluna-direita h3 {
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
             margin-bottom: 15px;
-            text-align: left;
         }
 
         .historico-container {
-            display: flex;
-            gap: 20px;
+            flex: 1;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--divider);
             border-radius: 16px;
             padding: 20px;
-            height: 220px;
-            overflow-x: auto;
-            align-items: flex-start;
-        }
-
-        .coluna-historico {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 120px;
-            flex-shrink: 0;
-        }
-
-        .coluna-historico:not(:first-child) {
-            border-left: 2px solid var(--divider);
-            padding-left: 20px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            grid-auto-rows: max-content;
+            gap: 12px;
+            align-content: start;
         }
 
         .item-historico {
             font-size: 14px;
             color: var(--text-muted);
-            white-space: nowrap;
+            background: rgba(51, 65, 85, 0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            text-align: center;
         }
 
         .item-historico strong {
             color: var(--accent);
             font-size: 16px;
-            margin-left: 5px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Estilos dos Elementos de Confete */
+        .confete {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            z-index: 999;
+            top: -20px;
+            opacity: 0.8;
+            animation: cair linear forwards;
+        }
+
+        @keyframes cair {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -276,20 +299,18 @@
         </div>
 
         <div id="painelJogo" style="display: none;">
-            <div class="sorteio-section">
+            <div class="coluna-esquerda">
                 <div id="rodadaTexto">Gire o Globo!</div>
                 <div class="bola-bingo" id="numeroSorteado">--</div>
-                
                 <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / 75</div>
-                
                 <div class="status" id="statusAnimacao"></div>
                 <button id="btnSortear" onclick="sortearNumero()">Sortear Número</button>
             </div>
 
-            <div class="historico-section">
-                <h3>Histórico das Rodadas (Colunas de 10)</h3>
+            <div class="coluna-direita">
+                <h3>Histórico das Rodadas</h3>
                 <div class="historico-container" id="historicoContainer">
-                    <div style="color: var(--text-muted); font-style: italic; width: 100%; text-align: center; padding-top: 50px;">
+                    <div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">
                         Nenhuma bola sorteada neste painel ainda.
                     </div>
                 </div>
@@ -302,12 +323,58 @@
     let rodada = 1;
     let numeros = [];
     let sorteados = [];
+    let audioCtx = null;
 
     for (let i = 1; i <= 75; i++) {
         numeros.push(i);
     }
 
+    // Gerador de som nativo do navegador (Web Audio API)
+    function tocarSom(frequencia, tipo, duracao, delay = 0) {
+        setTimeout(() => {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                let oscilador = audioCtx.createOscillator();
+                let ganho = audioCtx.createGain();
+                
+                oscilador.type = tipo; // 'sine', 'square', 'sawtooth', 'triangle'
+                oscilador.frequency.setValueAtTime(frequencia, audioCtx.currentTime);
+                
+                ganho.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                ganho.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duracao);
+                
+                oscilador.connect(ganho);
+                ganho.connect(audioCtx.destination);
+                
+                oscilador.start();
+                oscilador.stop(audioCtx.currentTime + duracao);
+            } catch (e) {
+                console.log("Áudio bloqueado ou não suportado:", e);
+            }
+        }, delay);
+    }
+
+    function tocarSomInicio() {
+        tocarSom(300, 'triangle', 0.15, 0);
+        tocarSom(450, 'triangle', 0.15, 100);
+        tocarSom(600, 'triangle', 0.3, 200);
+    }
+
+    function tocarSomRodada() {
+        tocarSom(523.25, 'sine', 0.1, 0); // Nota C5 rápida
+    }
+
+    function tocarSomFinal() {
+        // Fanfarra triunfal clássica de vitória
+        tocarSom(523.25, 'square', 0.2, 0);   // C5
+        tocarSom(659.25, 'square', 0.2, 150); // E5
+        tocarSom(783.99, 'square', 0.2, 300); // G5
+        tocarSom(1046.50, 'square', 0.5, 450); // C6 sustentado
+    }
+
     function iniciarJogo() {
+        tocarSomInicio();
         document.getElementById("painelInicial").style.display = "none";
         document.getElementById("painelJogo").style.display = "flex";
         document.getElementById("rodadaTexto").innerText = "Globo pronto!";
@@ -330,8 +397,10 @@
         bola.classList.add("animando");
         status.innerText = "Misturando o globo de pedras .";
 
-        setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; }, 250);
-        setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; }, 500);
+        // Bipes sutis de rotação do globo
+        tocarSom(150, 'sawtooth', 0.05, 0);
+        setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; tocarSom(180, 'sawtooth', 0.05, 0); }, 250);
+        setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; tocarSom(210, 'sawtooth', 0.05, 0); }, 500);
         
         setTimeout(() => {
             bola.classList.remove("animando");
@@ -354,34 +423,55 @@
             btn.disabled = false;
 
             if (numeros.length === 0) {
+                tocarSomFinal();
+                dispararConfetes();
                 status.innerHTML = "<strong style='color: var(--accent);'>Fim do sorteio! Todas as 75 pedras saíram.</strong>";
                 btn.disabled = true;
                 btn.innerText = "Concluído";
+            } else {
+                tocarSomRodada();
             }
         }, 750);
     }
 
     function atualizarHistorico() {
         const container = document.getElementById("historicoContainer");
-        container.innerHTML = "";
         
-        let colunaAtual = null;
+        const itemVazio = document.getElementById("itemVazio");
+        if (itemVazio) itemVazio.remove();
+        
+        const ultimoIndex = sorteados.length - 1;
+        const num = sorteados[ultimoIndex];
+        
+        const item = document.createElement("div");
+        item.className = "item-historico";
+        item.innerHTML = `${formatarNumero(ultimoIndex + 1)}º nº:<strong>${formatarNumero(num)}</strong>`;
+        
+        container.appendChild(item);
+        container.scrollTop = container.scrollHeight;
+    }
 
-        sorteados.forEach((num, index) => {
-            if (index % 10 === 0) {
-                colunaAtual = document.createElement("div");
-                colunaAtual.className = "coluna-historico";
-                container.appendChild(colunaAtual);
-            }
+    // Mecânica de Animação de Aniversário (Confetes)
+    function dispararConfetes() {
+        const cores = ['#fbbf24', '#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899'];
+        
+        // Loop para gerar 150 pedaços de confete na tela
+        for (let i = 0; i < 150; i++) {
+            const confete = document.createElement('div');
+            confete.className = 'confete';
             
-            const item = document.createElement("div");
-            item.className = "item-historico";
-            item.innerHTML = `${formatarNumero(index + 1)}º nº:<strong>${formatarNumero(num)}</strong>`;
+            // Características randômicas para cada papel picado
+            confete.style.left = Math.random() * 100 + 'vw';
+            confete.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
+            confete.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Entre 2s e 5s para cair
+            confete.style.animationDelay = (Math.random() * 2) + 's'; // Cascata de queda de até 2s
+            confete.style.transform = `scale(${Math.random() * 1 + 0.5})`; // Tamanhos variados
             
-            colunaAtual.appendChild(item);
-        });
-
-        container.scrollLeft = container.scrollWidth;
+            document.body.appendChild(confete);
+            
+            // Remove o elemento após a animação acabar para não acumular memória
+            setTimeout(() => { confete.remove(); }, 7000);
+        }
     }
 </script>
 
