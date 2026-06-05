@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo - Sorteio de Números</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #dc2626;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --divider: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            max-width: 650px;
+            width: 100%;
+        }
+
+        h1 { 
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main); 
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Barras de separação customizadas */
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: var(--divider);
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        button:hover { 
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button:disabled { 
+            background-color: #cbd5e1; 
+            color: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .sorteio-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        #rodadaTexto {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        /* Efeito de Bola de Bingo */
+        .bola-bingo {
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f1f5f9 20%, #cbd5e1 80%);
+            border: 4px solid var(--text-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            font-weight: 800;
+            color: var(--accent);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), inset -5px -5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            transition: transform 0.15s ease;
+        }
+
+        .animando {
+            animation: balancar 0.2s infinite alternate;
+        }
+
+        @keyframes balancar {
+            from { transform: translateY(-3px) rotate(-5deg); }
+            to { transform: translateY(3px) rotate(5deg); }
+        }
+
+        .status { 
+            font-size: 14px;
+            font-style: italic; 
+            color: var(--text-muted); 
+            min-height: 20px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: var(--text-main);
+            margin: 0 0 15px 0;
+            text-align: left;
+        }
+
+        /* Estrutura do Histórico em Colunas de 10 */
+        .historico-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #f8fafc;
+            border: 1px solid var(--divider);
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 100px;
+            overflow-x: auto;
+        }
+
+        .coluna-historico {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 105px;
+            flex: 1;
+            text-align: left;
+        }
+
+        /* Linha divisória vertical entre as colunas (exceto na primeira) */
+        .coluna-historico:not(:first-child) {
+            border-left: 1px solid var(--divider);
+            padding-left: 15px;
+        }
+
+        .item-historico {
+            font-size: 14px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .item-historico strong {
+            color: var(--text-main);
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎰 BINGO 75</h1>
+    <hr>
+    
+    <div id="painelInicial">
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Pronto para começar uma nova rodada?</p>
+        <button onclick="iniciarJogo()">Começar Sorteio</button>
+    </div>
+
+    <div id="painelJogo" style="display: none;">
+        <div class="sorteio-section">
+            <div id="rodadaTexto">Aguardando início...</div>
+            <div class="bola-bingo" id="numeroSorteado">-</div>
+            <div class="status" id="statusAnimacao"></div>
+            <button id="btnSortear" onclick="sortearNumero()">Sortear Próximo Número</button>
+        </div>
+
+        <hr>
+        
+        <h3>Histórico de Sorteados:</h3>
+        <div class="historico-container" id="historicoContainer">
+            <div style="color: var(--text-muted); font-style: italic; width: 100%; text-align: center; padding: 20px 0;">
+                Nenhum número sorteado ainda.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let rodada = 1;
+    let numeros = [];
+    let sorteados = [];
+
+    // Popula os 75 números
+    for (let i = 1; i <= 75; i++) {
+        numeros.push(i);
+    }
+
+    function iniciarJogo() {
+        document.getElementById("painelInicial").style.display = "none";
+        document.getElementById("painelJogo").style.display = "block";
+        document.getElementById("rodadaTexto").innerText = "Pronto para girar!";
+    }
+
+    function sortearNumero() {
+        if (numeros.length === 0) return;
+
+        const btn = document.getElementById("btnSortear");
+        const status = document.getElementById("statusAnimacao");
+        const bola = document.getElementById("numeroSorteado");
+        
+        btn.disabled = true;
+        bola.classList.add("animando");
+        status.innerText = "Misturando as bolas .";
+
+        setTimeout(() => { status.innerText = "Misturando as bolas . ."; }, 250);
+        setTimeout(() => { status.innerText = "Misturando as bolas . . ."; }, 500);
+        
+        setTimeout(() => {
+            bola.classList.remove("animando");
+            status.innerText = "";
+            
+            const indiceAleatorio = Math.floor(Math.random() * numeros.length);
+            const numeroSorteado = numeros[indiceAleatorio];
+
+            sorteados.push(numeroSorteado);
+            numeros.splice(indiceAleatorio, 1);
+
+            document.getElementById("rodadaTexto").innerText = `${rodada}º Número sorteado`;
+            bola.innerText = numeroSorteado;
+            
+            atualizarHistorico();
+
+            rodada++;
+            btn.disabled = false;
+
+            if (numeros.length === 0) {
+                status.innerHTML = "<strong style='color: var(--accent);'>Fim de jogo! Todos os 75 números foram sorteados.</strong>";
+                btn.disabled = true;
+                btn.innerText = "Sorteio Concluído";
+            }
+        }, 750);
+    }
+
+    function atualizarHistorico() {
+        const container = document.getElementById("historicoContainer");
+        container.innerHTML = ""; // Limpa o estado anterior
+        
+        let colunaAtual = null;
+
+        sorteados.forEach((num, index) => {
+            // A cada 10 elementos (0, 10, 20...), cria uma nova coluna
+            if (index % 10 === 0) {
+                colunaAtual = document.createElement("div");
+                colunaAtual.className = "coluna-historico";
+                container.appendChild(colunaAtual);
+            }
+            
+            // Cria o item da rodada
+            const item = document.createElement("div");
+            item.className = "item-historico";
+            item.innerHTML = `${index + 1}º nº: <strong>${num}</strong>`;
+            
+            colunaAtual.appendChild(item);
+        });
+    }
+</script>
+
+</body>
+</html>
