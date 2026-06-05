@@ -3,176 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo - Sorteio de Números</title>
+    <title>Bingo Pro - Sorteio Eletrônico</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%231e293b%22 stroke=%22%23fbbf24%22 stroke-width=%226%22/><circle cx=%2245%22 cy=%2245%22 r=%2222%22 fill=%22%23ffffff%22/><text x=%2250%22 y=%2268%22 font-family=%22sans-serif%22 font-size=%2252%22 font-weight=%22900%22 fill=%22%23dc2626%22 text-anchor=%22middle%22>75</text></svg>">
+
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --accent: #dc2626;
-            --bg-page: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --divider: #e2e8f0;
+            --bg-main: #0f172a;       /* Azul escuro profundo (fundo) */
+            --bg-card: #1e293b;       /* Azul ardósia (painéis) */
+            --primary: #d97706;       /* Ouro / Âmbar escuro */
+            --primary-hover: #b45309; /* Ouro mais escuro */
+            --accent: #f59e0b;        /* Ouro brilhante para destaques */
+            --ball-text: #dc2626;     /* Vermelho vivo para o número sorteado */
+            --text-main: #f8fafc;     /* Branco quase puro */
+            --text-muted: #94a3b8;    /* Cinza azulado */
+            --divider: #334155;       /* Linha divisória suave */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-page);
+            background-color: var(--bg-main);
             color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Layout Full Screen Responsivo */
+        .app-window {
+            background-color: var(--bg-card);
+            width: 100vw;
+            height: 100vh;
+            max-width: 1200px;
+            max-height: 850px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--divider);
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        /* Topo com o Ícone SVG Novo */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding-bottom: 25px;
+            border-bottom: 2px dashed var(--divider);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        /* Área Central do Jogo */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 0;
+        }
+
+        #painelInicial {
+            text-align: center;
+        }
+
+        #painelInicial p {
+            color: var(--text-muted);
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        #painelJogo {
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .container {
-            background-color: var(--bg-card);
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            max-width: 650px;
-            width: 100%;
-        }
-
-        h1 { 
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--text-main); 
-            margin: 0 0 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        /* Barras de separação customizadas */
-        hr {
-            border: 0;
-            height: 1px;
-            background-color: var(--divider);
-            margin: 20px 0;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-        }
-
-        button:hover { 
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-        
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button:disabled { 
-            background-color: #cbd5e1; 
-            color: #94a3b8;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
+            height: 100%;
         }
 
         .sorteio-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 20px 0;
+            margin-bottom: auto;
         }
 
         #rodadaTexto {
             font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
+            font-weight: 700;
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 10px;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
         }
 
-        /* Efeito de Bola de Bingo */
+        /* Bola de Bingo Estilo Cassino */
         .bola-bingo {
-            width: 110px;
-            height: 110px;
-            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f1f5f9 20%, #cbd5e1 80%);
-            border: 4px solid var(--text-main);
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f8fafc 25%, #cbd5e1 75%, #94a3b8 100%);
+            border: 6px solid var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 44px;
-            font-weight: 800;
-            color: var(--accent);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), inset -5px -5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            font-size: 68px;
+            font-weight: 900;
+            color: var(--ball-text);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
+            margin-bottom: 25px;
             transition: transform 0.15s ease;
         }
 
         .animando {
-            animation: balancar 0.2s infinite alternate;
+            animation: balancar 0.15s infinite alternate;
         }
 
         @keyframes balancar {
-            from { transform: translateY(-3px) rotate(-5deg); }
-            to { transform: translateY(3px) rotate(5deg); }
+            from { transform: translateY(-5px) rotate(-6deg); }
+            to { transform: translateY(5px) rotate(6deg); }
         }
 
-        .status { 
-            font-size: 14px;
-            font-style: italic; 
-            color: var(--text-muted); 
-            min-height: 20px;
-            margin-bottom: 15px;
+        .status {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-muted);
+            min-height: 22px;
+            margin-bottom: 20px;
         }
 
-        h3 {
-            font-size: 16px;
+        /* Botões Estilizados */
+        button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
             color: var(--text-main);
-            margin: 0 0 15px 0;
+            border: none;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button:disabled {
+            background: #475569;
+            color: #1e293b;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+            filter: none;
+        }
+
+        /* Histórico de Sorteados Inferior (Separado por Linha) */
+        .historico-section {
+            width: 100%;
+            border-top: 2px dashed var(--divider);
+            padding-top: 25px;
+            margin-top: auto;
+        }
+
+        .historico-section h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
             text-align: left;
         }
 
-        /* Estrutura do Histórico em Colunas de 10 */
         .historico-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            background: #f8fafc;
+            gap: 20px;
+            background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--divider);
-            border-radius: 12px;
-            padding: 15px;
-            min-height: 100px;
+            border-radius: 16px;
+            padding: 20px;
+            height: 180px;
             overflow-x: auto;
+            align-items: flex-start;
         }
 
         .coluna-historico {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            min-width: 105px;
-            flex: 1;
-            text-align: left;
+            gap: 8px;
+            min-width: 120px;
+            flex-shrink: 0;
         }
 
-        /* Linha divisória vertical entre as colunas (exceto na primeira) */
+        /* Barras verticais separadoras */
         .coluna-historico:not(:first-child) {
-            border-left: 1px solid var(--divider);
-            padding-left: 15px;
+            border-left: 2px solid var(--divider);
+            padding-left: 20px;
         }
 
         .item-historico {
@@ -182,39 +244,48 @@
         }
 
         .item-historico strong {
-            color: var(--text-main);
-            font-size: 15px;
+            color: var(--accent);
+            font-size: 16px;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🎰 BINGO 75</h1>
-    <hr>
+<div class="app-window">
+    <header>
+        <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#1e293b" stroke="#f59e0b" stroke-width="5"/>
+            <circle cx="44" cy="44" r="20" fill="#ffffff"/>
+            <text x="50" y="68" font-family="sans-serif" font-size="48" font-weight="900" fill="#dc2626" text-anchor="middle">75</text>
+        </svg>
+        <h1>BINGO <span>PRO</span></h1>
+    </header>
     
-    <div id="painelInicial">
-        <p style="color: var(--text-muted); margin-bottom: 20px;">Pronto para começar uma nova rodada?</p>
-        <button onclick="iniciarJogo()">Começar Sorteio</button>
-    </div>
-
-    <div id="painelJogo" style="display: none;">
-        <div class="sorteio-section">
-            <div id="rodadaTexto">Aguardando início...</div>
-            <div class="bola-bingo" id="numeroSorteado">-</div>
-            <div class="status" id="statusAnimacao"></div>
-            <button id="btnSortear" onclick="sortearNumero()">Sortear Próximo Número</button>
+    <main class="main-content">
+        <div id="painelInicial">
+            <p>Prepare o seu bilhete! Pronto para iniciar o sorteio oficial?</p>
+            <button onclick="iniciarJogo()">Abrir Sala de Jogo</button>
         </div>
 
-        <hr>
-        
-        <h3>Histórico de Sorteados:</h3>
-        <div class="historico-container" id="historicoContainer">
-            <div style="color: var(--text-muted); font-style: italic; width: 100%; text-align: center; padding: 20px 0;">
-                Nenhum número sorteado ainda.
+        <div id="painelJogo" style="display: none;">
+            <div class="sorteio-section">
+                <div id="rodadaTexto">Gire o Globo!</div>
+                <div class="bola-bingo" id="numeroSorteado">--</div>
+                <div class="status" id="statusAnimacao"></div>
+                <button id="btnSortear" onclick="sortearNumero()">Sortear Número</button>
+            </div>
+
+            <div class="historico-section">
+                <h3>Histórico das Rodadas (Colunas de 10)</h3>
+                <div class="historico-container" id="historicoContainer">
+                    <div style="color: var(--text-muted); font-style: italic; width: 100%; text-align: center; padding-top: 50px;">
+                        Nenhuma bola sorteada neste painel ainda.
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>
 
 <script>
@@ -222,15 +293,18 @@
     let numeros = [];
     let sorteados = [];
 
-    // Popula os 75 números
     for (let i = 1; i <= 75; i++) {
         numeros.push(i);
     }
 
     function iniciarJogo() {
         document.getElementById("painelInicial").style.display = "none";
-        document.getElementById("painelJogo").style.display = "block";
-        document.getElementById("rodadaTexto").innerText = "Pronto para girar!";
+        document.getElementById("painelJogo").style.display = "flex";
+        document.getElementById("rodadaTexto").innerText = "Globo pronto!";
+    }
+
+    function formatarNumero(num) {
+        return String(num).padStart(2, '0');
     }
 
     function sortearNumero() {
@@ -242,10 +316,10 @@
         
         btn.disabled = true;
         bola.classList.add("animando");
-        status.innerText = "Misturando as bolas .";
+        status.innerText = "Misturando o globo de pedras .";
 
-        setTimeout(() => { status.innerText = "Misturando as bolas . ."; }, 250);
-        setTimeout(() => { status.innerText = "Misturando as bolas . . ."; }, 500);
+        setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; }, 250);
+        setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; }, 500);
         
         setTimeout(() => {
             bola.classList.remove("animando");
@@ -257,8 +331,8 @@
             sorteados.push(numeroSorteado);
             numeros.splice(indiceAleatorio, 1);
 
-            document.getElementById("rodadaTexto").innerText = `${rodada}º Número sorteado`;
-            bola.innerText = numeroSorteado;
+            document.getElementById("rodadaTexto").innerText = `Rodada ${formatarNumero(rodada)}`;
+            bola.innerText = formatarNumero(numeroSorteado);
             
             atualizarHistorico();
 
@@ -266,34 +340,35 @@
             btn.disabled = false;
 
             if (numeros.length === 0) {
-                status.innerHTML = "<strong style='color: var(--accent);'>Fim de jogo! Todos os 75 números foram sorteados.</strong>";
+                status.innerHTML = "<strong style='color: var(--accent);'>Fim do sorteio! Todas as 75 pedras saíram.</strong>";
                 btn.disabled = true;
-                btn.innerText = "Sorteio Concluído";
+                btn.innerText = "Concluído";
             }
         }, 750);
     }
 
     function atualizarHistorico() {
         const container = document.getElementById("historicoContainer");
-        container.innerHTML = ""; // Limpa o estado anterior
+        container.innerHTML = "";
         
         let colunaAtual = null;
 
         sorteados.forEach((num, index) => {
-            // A cada 10 elementos (0, 10, 20...), cria uma nova coluna
             if (index % 10 === 0) {
                 colunaAtual = document.createElement("div");
                 colunaAtual.className = "coluna-historico";
                 container.appendChild(colunaAtual);
             }
             
-            // Cria o item da rodada
             const item = document.createElement("div");
             item.className = "item-historico";
-            item.innerHTML = `${index + 1}º nº: <strong>${num}</strong>`;
+            item.innerHTML = `${formatarNumero(index + 1)}º nº:<strong>${formatarNumero(num)}</strong>`;
             
             colunaAtual.appendChild(item);
         });
+
+        // Mantém a rolagem automática horizontal travada na coluna mais recente
+        container.scrollLeft = container.scrollWidth;
     }
 </script>
 
