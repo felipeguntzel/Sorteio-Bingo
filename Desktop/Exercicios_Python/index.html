@@ -9,15 +9,15 @@
 
     <style>
         :root {
-            --bg-main: #0f172a;       /* Azul escuro profundo (fundo) */
-            --bg-card: #1e293b;       /* Azul ardósia (painéis) */
-            --primary: #d97706;       /* Ouro / Âmbar escuro */
-            --primary-hover: #b45309; /* Ouro mais escuro */
-            --accent: #f59e0b;        /* Ouro brilhante para destaques */
-            --ball-text: #dc2626;     /* Vermelho vivo para o número sorteado */
-            --text-main: #f8fafc;     /* Branco quase puro */
-            --text-muted: #94a3b8;    /* Cinza azulado */
-            --divider: #334155;       /* Linha divisória suave */
+            --bg-main: #0f172a;       
+            --bg-card: #1e293b;       
+            --primary: #d97706;       
+            --primary-hover: #b45309; 
+            --accent: #f59e0b;        
+            --ball-text: #dc2626;     
+            --text-main: #f8fafc;     
+            --text-muted: #94a3b8;    
+            --divider: #334155;       
         }
 
         * {
@@ -37,13 +37,12 @@
             padding: 20px;
         }
 
-        /* Layout Full Screen Responsivo */
         .app-window {
             background-color: var(--bg-card);
             width: 100vw;
             height: 100vh;
-            max-width: 1200px;
-            max-height: 850px;
+            max-width: 1300px;
+            max-height: 900px;
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 158, 11, 0.1);
             border: 1px solid var(--divider);
@@ -53,7 +52,6 @@
             overflow: hidden;
         }
 
-        /* Topo com o Ícone SVG Novo */
         header {
             display: flex;
             align-items: center;
@@ -80,7 +78,6 @@
             color: var(--accent);
         }
 
-        /* Área Central do Jogo */
         .main-content {
             flex: 1;
             display: flex;
@@ -124,7 +121,6 @@
             margin-bottom: 12px;
         }
 
-        /* Bola de Bingo Estilo Cassino */
         .bola-bingo {
             width: 160px;
             height: 160px;
@@ -138,7 +134,7 @@
             font-weight: 900;
             color: var(--ball-text);
             box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             transition: transform 0.15s ease;
         }
 
@@ -151,6 +147,24 @@
             to { transform: translateY(5px) rotate(6deg); }
         }
 
+        .contador-restante {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background-color: rgba(15, 23, 42, 0.4);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--divider);
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            letter-spacing: 0.05em;
+        }
+        
+        .contador-restante span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
         .status {
             font-size: 15px;
             font-style: italic;
@@ -159,7 +173,6 @@
             margin-bottom: 20px;
         }
 
-        /* Botões Estilizados */
         button {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
             color: var(--text-main);
@@ -181,10 +194,6 @@
             filter: brightness(1.1);
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
-
         button:disabled {
             background: #475569;
             color: #1e293b;
@@ -194,7 +203,6 @@
             filter: none;
         }
 
-        /* Histórico de Sorteados Inferior (Separado por Linha) */
         .historico-section {
             width: 100%;
             border-top: 2px dashed var(--divider);
@@ -218,7 +226,7 @@
             border: 1px solid var(--divider);
             border-radius: 16px;
             padding: 20px;
-            height: 180px;
+            height: 220px;
             overflow-x: auto;
             align-items: flex-start;
         }
@@ -231,7 +239,6 @@
             flex-shrink: 0;
         }
 
-        /* Barras verticais separadoras */
         .coluna-historico:not(:first-child) {
             border-left: 2px solid var(--divider);
             padding-left: 20px;
@@ -272,6 +279,9 @@
             <div class="sorteio-section">
                 <div id="rodadaTexto">Gire o Globo!</div>
                 <div class="bola-bingo" id="numeroSorteado">--</div>
+                
+                <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / 75</div>
+                
                 <div class="status" id="statusAnimacao"></div>
                 <button id="btnSortear" onclick="sortearNumero()">Sortear Número</button>
             </div>
@@ -301,6 +311,7 @@
         document.getElementById("painelInicial").style.display = "none";
         document.getElementById("painelJogo").style.display = "flex";
         document.getElementById("rodadaTexto").innerText = "Globo pronto!";
+        document.getElementById("numerosFaltando").innerText = numeros.length;
     }
 
     function formatarNumero(num) {
@@ -313,6 +324,7 @@
         const btn = document.getElementById("btnSortear");
         const status = document.getElementById("statusAnimacao");
         const bola = document.getElementById("numeroSorteado");
+        const txtFaltando = document.getElementById("numerosFaltando");
         
         btn.disabled = true;
         bola.classList.add("animando");
@@ -333,6 +345,8 @@
 
             document.getElementById("rodadaTexto").innerText = `Rodada ${formatarNumero(rodada)}`;
             bola.innerText = formatarNumero(numeroSorteado);
+            
+            txtFaltando.innerText = numeros.length;
             
             atualizarHistorico();
 
@@ -367,7 +381,6 @@
             colunaAtual.appendChild(item);
         });
 
-        // Mantém a rolagem automática horizontal travada na coluna mais recente
         container.scrollLeft = container.scrollWidth;
     }
 </script>
