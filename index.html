@@ -11,534 +11,7 @@
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%231e293b%22 stroke=%22%23fbbf24%22 stroke-width=%226%22/><circle cx=%2245%22 cy=%2245%22 r=%2222%22 fill=%22%23ffffff%22/><text x=%2250%22 y=%2268%22 font-family=%22sans-serif%22 font-size=%2252%22 font-weight=%22900%22 fill=%22%23dc2626%22 text-anchor=%22middle%22>75</text></svg>">
 
-    <style>
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --primary: #d97706;
-            --primary-hover: #b45309;
-            --accent: #f59e0b;
-            --ball-text: #dc2626;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --divider: #334155;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .app-window {
-            background-color: var(--bg-card);
-            width: 100vw;
-            height: 100vh;
-            max-width: 1400px;
-            max-height: 850px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 158, 11, 0.1);
-            border: 1px solid var(--divider);
-            display: flex;
-            flex-direction: column;
-            padding: 35px;
-            overflow: hidden;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            padding-bottom: 20px;
-            border-bottom: 2px dashed var(--divider);
-        }
-
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-        }
-
-        h1 {
-            font-size: 30px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--text-main);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        h1 span {
-            color: var(--accent);
-        }
-
-        /* Espaços reservados para anúncios (ex.: Google AdSense). Ficam em branco até um script de anúncio ser inserido. */
-        .ad-slot {
-            width: 100%;
-            min-height: 60px;
-            margin-top: 16px;
-            border: 1px dashed var(--divider);
-            border-radius: 10px;
-            background: rgba(15, 23, 42, 0.3);
-            flex-shrink: 0;
-        }
-
-        .ad-slot-lateral {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 160px;
-            height: min(600px, 70vh);
-            margin-top: 0;
-            z-index: 1;
-            display: none;
-        }
-
-        .ad-slot-esquerda { left: 24px; }
-        .ad-slot-direita { right: 24px; }
-
-        @media (min-width: 1800px) {
-            .ad-slot-lateral { display: block; }
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        #painelInicial {
-            text-align: center;
-            width: 100%;
-            max-width: 380px;
-            max-height: 100%;
-            overflow-y: auto;
-            padding: 6px;
-        }
-
-        #painelInicial p {
-            color: var(--text-muted);
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .config-grupo {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-
-        .config-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .config-opcoes {
-            display: flex;
-            gap: 10px;
-        }
-
-        .radio-chip {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 10px;
-            border: 1px solid var(--divider);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            background: rgba(15, 23, 42, 0.4);
-            transition: all 0.15s ease;
-        }
-
-        .radio-chip.selecionado {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .config-select {
-            width: 100%;
-            padding: 11px 12px;
-            border-radius: 10px;
-            border: 1px solid var(--divider);
-            background: rgba(15, 23, 42, 0.4);
-            color: var(--text-main);
-            font-size: 14px;
-        }
-
-        #painelInicial button {
-            width: 100%;
-            margin-top: 6px;
-        }
-
-        #inputQuantidadeManual {
-            margin-top: 8px;
-        }
-
-        #painelJogo {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow: hidden;
-            padding: 20px 0;
-        }
-
-        .resumo-config {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 18px;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid var(--divider);
-            border-radius: 10px;
-            padding: 10px 16px;
-            flex-shrink: 0;
-        }
-
-        .resumo-config strong {
-            color: var(--text-main);
-            font-weight: 700;
-            margin-right: 4px;
-        }
-
-        .painel-colunas {
-            flex: 1;
-            display: flex;
-            gap: 30px;
-            overflow: hidden;
-            min-height: 0;
-        }
-
-        .coluna-esquerda {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 2px dashed var(--divider);
-            padding-right: 15px;
-        }
-
-        .coluna-direita {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding-left: 15px;
-            overflow: hidden;
-        }
-
-        #rodadaTexto {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 15px;
-        }
-
-        .bola-bingo {
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f8fafc 25%, #cbd5e1 75%, #94a3b8 100%);
-            border: 6px solid var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 76px;
-            font-weight: 900;
-            color: var(--ball-text);
-            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-            transition: transform 0.15s ease;
-        }
-
-        .bola-bingo.tres-digitos {
-            font-size: 52px;
-        }
-
-        .animando {
-            animation: balancar 0.15s infinite alternate;
-        }
-
-        @keyframes balancar {
-            from { transform: translateY(-5px) rotate(-6deg); }
-            to { transform: translateY(5px) rotate(6deg); }
-        }
-
-        .contador-restante {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            background-color: rgba(15, 23, 42, 0.4);
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--divider);
-            color: var(--text-muted);
-            margin-bottom: 25px;
-            letter-spacing: 0.05em;
-        }
-
-        .contador-restante span {
-            color: var(--accent);
-            font-weight: 800;
-        }
-
-        .status {
-            font-size: 15px;
-            font-style: italic;
-            color: var(--text-muted);
-            min-height: 22px;
-            margin-bottom: 25px;
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-            color: var(--text-main);
-            border: none;
-            padding: 18px 45px;
-            font-size: 18px;
-            font-weight: 700;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
-            filter: brightness(1.1);
-        }
-
-        button:disabled {
-            background: #475569;
-            color: #1e293b;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-            filter: none;
-        }
-
-        .coluna-direita h3 {
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
-
-        .historico-container {
-            flex: 1;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--divider);
-            border-radius: 16px;
-            padding: 20px;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            grid-auto-rows: max-content;
-            gap: 12px;
-            align-content: start;
-        }
-
-        .item-historico {
-            font-size: 14px;
-            color: var(--text-muted);
-            background: rgba(51, 65, 85, 0.3);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(51, 65, 85, 0.5);
-            text-align: center;
-        }
-
-        .item-historico strong {
-            color: var(--accent);
-            font-size: 16px;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .app-footer {
-            position: fixed;
-            bottom: 12px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            letter-spacing: 0.03em;
-            z-index: 1;
-        }
-
-        .app-footer strong {
-            color: var(--accent);
-        }
-
-        .footer-separador {
-            margin: 0 8px;
-            opacity: 0.5;
-        }
-
-        .link-botao {
-            background: none;
-            border: none;
-            padding: 0;
-            font: inherit;
-            font-size: 12px;
-            color: var(--text-muted);
-            text-decoration: underline;
-            cursor: pointer;
-            box-shadow: none;
-            text-transform: none;
-            letter-spacing: normal;
-        }
-
-        .link-botao:hover {
-            color: var(--accent);
-            transform: none;
-            box-shadow: none;
-            filter: none;
-        }
-
-        /* Modais de Sobre / Privacidade */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.65);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal-box {
-            background: var(--bg-card);
-            border: 1px solid var(--divider);
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 480px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            text-align: left;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-        }
-
-        .modal-box h2 {
-            color: var(--accent);
-            font-size: 20px;
-            margin-bottom: 16px;
-        }
-
-        .modal-box p {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .modal-box ul {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.6;
-            margin: 0 0 12px 20px;
-        }
-
-        .modal-box button {
-            margin-top: 10px;
-            padding: 12px 30px;
-            font-size: 14px;
-        }
-
-        /* Estilos dos Elementos de Confete */
-        .confete {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            z-index: 999;
-            top: -20px;
-            opacity: 0.8;
-            animation: cair linear forwards;
-        }
-
-        @keyframes cair {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(105vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .app-window {
-                padding: 20px;
-                border-radius: 16px;
-            }
-
-            .painel-colunas {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .coluna-esquerda {
-                border-right: none;
-                border-bottom: 2px dashed var(--divider);
-                padding-right: 0;
-                padding-bottom: 15px;
-            }
-
-            .coluna-direita {
-                padding-left: 0;
-            }
-
-            .bola-bingo {
-                width: 130px;
-                height: 130px;
-                font-size: 56px;
-            }
-
-            .bola-bingo.tres-digitos {
-                font-size: 42px;
-            }
-
-            .ad-slot-lateral {
-                display: none !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -558,60 +31,14 @@
     <div class="ad-slot" id="adSlot"></div>
 
     <main class="main-content">
-        <div id="painelInicial">
-            <p>Configure o sorteio e prepare o seu bilhete!</p>
-
-            <div class="config-grupo">
-                <span class="config-label">Modo de sorteio</span>
-                <div class="config-opcoes" id="grupoModo">
-                    <label class="radio-chip"><input type="radio" name="modo" value="manual" checked> Manual</label>
-                    <label class="radio-chip"><input type="radio" name="modo" value="automatico"> Automático</label>
-                </div>
-            </div>
-
-            <div class="config-grupo">
-                <label class="config-label" for="seletorQuantidade">Quantidade de bolas</label>
-                <select id="seletorQuantidade" class="config-select">
-                    <option value="30">30 bolas (Bingo rápido)</option>
-                    <option value="75" selected>75 bolas (Bingo tradicional)</option>
-                    <option value="90">90 bolas (Bingo europeu)</option>
-                    <option value="manual">Outro (digitar valor)</option>
-                </select>
-                <input type="number" id="inputQuantidadeManual" class="config-select" min="10" max="200" step="1" placeholder="Digite de 10 a 200" aria-label="Quantidade de bolas, de 10 a 200" style="display: none;">
-            </div>
-
-            <div class="config-grupo">
-                <label class="config-label" for="seletorSom">Som</label>
-                <select id="seletorSom" class="config-select">
-                    <option value="classico" selected>Clássico</option>
-                    <option value="cassino">Cassino</option>
-                    <option value="suave">Suave</option>
-                    <option value="retro">Retrô</option>
-                    <option value="mudo">Mudo</option>
-                </select>
-            </div>
-
-            <div class="config-grupo">
-                <label class="config-label" for="seletorTema">Tema (cor)</label>
-                <select id="seletorTema" class="config-select">
-                    <option value="ambar" selected>Âmbar (padrão)</option>
-                    <option value="azul">Azul</option>
-                    <option value="verde">Verde</option>
-                    <option value="roxo">Roxo</option>
-                    <option value="vermelho">Vermelho</option>
-                </select>
-            </div>
-
-            <button onclick="iniciarJogo()">Abrir Sala de Jogo</button>
-        </div>
-
-        <div id="painelJogo" style="display: none;">
+        <div id="painelJogo">
             <div class="resumo-config" id="resumoConfig">
                 <span><strong>Modo:</strong> <span id="resumoModo"></span></span>
                 <span><strong>Bolas:</strong> <span id="resumoQuantidade"></span></span>
                 <span><strong>Som:</strong> <span id="resumoSom"></span></span>
                 <span><strong>Tema:</strong> <span id="resumoTema"></span></span>
-                <button class="link-botao" onclick="voltarConfiguracoes()">Alterar configurações</button>
+                <span><strong>Repete:</strong> <span id="resumoRepetir"></span></span>
+                <button class="botao-engrenagem" id="btnAbrirConfiguracoes" type="button">⚙ Configurações</button>
             </div>
 
             <div class="painel-colunas">
@@ -621,14 +48,14 @@
                     <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / <span id="totalBolasLabel">75</span></div>
                     <div class="status" id="statusAnimacao" aria-live="polite"></div>
                     <div id="areaControles">
-                        <button id="btnAcao" onclick="sortearNumero()">Sortear Número</button>
+                        <button id="btnAcao" type="button">Sortear Número</button>
                     </div>
                 </div>
 
                 <div class="coluna-direita">
                     <h3>Histórico das Rodadas</h3>
                     <div class="historico-container" id="historicoContainer">
-                        <div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">
+                        <div id="itemVazio" class="historico-vazio">
                             Nenhuma bola sorteada neste painel ainda.
                         </div>
                     </div>
@@ -639,23 +66,81 @@
 </div>
 
 <footer class="app-footer">
-    <button class="link-botao" onclick="abrirModal('modalSobre')">Sobre</button>
+    <button class="link-botao" id="btnAbrirSobre" type="button">Sobre</button>
     <span class="footer-separador">·</span>
-    <button class="link-botao" onclick="abrirModal('modalPrivacidade')">Privacidade</button>
+    <button class="link-botao" id="btnAbrirPrivacidade" type="button">Privacidade</button>
     <span class="footer-separador">·</span>
     Desenvolvido por <strong>Guntzel Tech</strong>
 </footer>
 
-<div class="modal-overlay" id="modalSobre" onclick="fecharModalClique(event, 'modalSobre')" role="dialog" aria-modal="true" aria-labelledby="modalSobreTitulo">
+<div class="modal-overlay" id="modalConfiguracoes" role="dialog" aria-modal="true" aria-labelledby="modalConfiguracoesTitulo">
+    <div class="modal-box">
+        <h2 id="modalConfiguracoesTitulo">Configurações do Sorteio</h2>
+
+        <div class="config-grupo">
+            <span class="config-label">Modo de sorteio</span>
+            <div class="config-opcoes" id="grupoModo">
+                <label class="radio-chip"><input type="radio" name="modo" value="manual" checked> Manual</label>
+                <label class="radio-chip"><input type="radio" name="modo" value="automatico"> Automático</label>
+            </div>
+        </div>
+
+        <div class="config-grupo">
+            <label class="config-label" for="seletorQuantidade">Quantidade de bolas</label>
+            <select id="seletorQuantidade" class="config-select">
+                <option value="30">30 bolas (Bingo rápido)</option>
+                <option value="75" selected>75 bolas (Bingo tradicional)</option>
+                <option value="90">90 bolas (Bingo europeu)</option>
+                <option value="manual">Outro (digitar valor)</option>
+            </select>
+            <input type="number" id="inputQuantidadeManual" class="config-select oculto" min="10" max="200" step="1" placeholder="Digite de 10 a 200" aria-label="Quantidade de bolas, de 10 a 200">
+        </div>
+
+        <div class="config-grupo">
+            <label class="config-label" for="seletorSom">Som</label>
+            <select id="seletorSom" class="config-select">
+                <option value="classico" selected>Clássico</option>
+                <option value="cassino">Cassino</option>
+                <option value="suave">Suave</option>
+                <option value="retro">Retrô</option>
+                <option value="mudo">Mudo</option>
+            </select>
+        </div>
+
+        <div class="config-grupo">
+            <label class="config-label" for="seletorTema">Tema (cor)</label>
+            <select id="seletorTema" class="config-select">
+                <option value="ambar" selected>Âmbar (padrão)</option>
+                <option value="azul">Azul</option>
+                <option value="verde">Verde</option>
+                <option value="roxo">Roxo</option>
+                <option value="vermelho">Vermelho</option>
+            </select>
+        </div>
+
+        <div class="config-grupo">
+            <span class="config-label">Repetir números sorteados?</span>
+            <div class="config-opcoes" id="grupoRepetir">
+                <label class="radio-chip"><input type="radio" name="repetir" value="nao" checked> Não</label>
+                <label class="radio-chip"><input type="radio" name="repetir" value="sim"> Sim</label>
+            </div>
+        </div>
+
+        <button id="btnAplicarConfiguracoes" type="button">Aplicar e Reiniciar Sorteio</button>
+        <button id="btnFecharConfiguracoes" type="button" class="btn-secundario">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalSobre" role="dialog" aria-modal="true" aria-labelledby="modalSobreTitulo">
     <div class="modal-box">
         <h2 id="modalSobreTitulo">Sobre o Bingo Pro</h2>
         <p>Bingo Pro é um sorteador eletrônico de bingo gratuito, feito para ser simples e direto: escolha o modo manual ou automático, a quantidade de bolas (30, 75, 90 ou um valor entre 10 e 200), o som e o tema de cor, e comece a sortear.</p>
         <p>Todo o jogo roda no seu navegador, sem instalação e sem necessidade de conta. Depois da primeira visita, o Bingo Pro continua funcionando mesmo sem internet.</p>
-        <button onclick="fecharModal('modalSobre')">Fechar</button>
+        <button id="btnFecharSobre" type="button">Fechar</button>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalPrivacidade" onclick="fecharModalClique(event, 'modalPrivacidade')" role="dialog" aria-modal="true" aria-labelledby="modalPrivacidadeTitulo">
+<div class="modal-overlay" id="modalPrivacidade" role="dialog" aria-modal="true" aria-labelledby="modalPrivacidadeTitulo">
     <div class="modal-box">
         <h2 id="modalPrivacidadeTitulo">Política de Privacidade</h2>
         <ul>
@@ -664,394 +149,12 @@
             <li>Não coletamos seu endereço IP.</li>
             <li>Não guardamos nenhuma informação pessoal em servidores.</li>
         </ul>
-        <p>Salvamos apenas, no armazenamento local do seu próprio navegador, as suas últimas preferências de uso: modo escolhido, quantidade de bolas, som e tema. Esses dados nunca saem do seu dispositivo.</p>
-        <button onclick="fecharModal('modalPrivacidade')">Fechar</button>
+        <p>Salvamos apenas, no armazenamento local do seu próprio navegador, as suas últimas preferências de uso: modo escolhido, quantidade de bolas, som, tema e a opção de repetir números. Esses dados nunca saem do seu dispositivo.</p>
+        <button id="btnFecharPrivacidade" type="button">Fechar</button>
     </div>
 </div>
 
-<script>
-    let rodada = 1;
-    let numeros = [];
-    let sorteados = [];
-    let audioCtx = null;
-
-    let modoJogo = 'manual';
-    let totalBolas = 75;
-    let somAtual = 'classico';
-    let temaAtual = 'ambar';
-    let autoRodando = false;
-    let autoTimeoutId = null;
-
-    const CHAVE_PREFS = 'bingoPro.preferencias';
-
-    const perfisSom = {
-        classico: { tipo: 'sine',     freq: 523.25 },
-        cassino:  { tipo: 'square',   freq: 587.33 },
-        suave:    { tipo: 'triangle', freq: 440.00 },
-        retro:    { tipo: 'sawtooth', freq: 349.23 },
-        mudo:     null
-    };
-
-    const temas = {
-        ambar:    { primary: '#d97706', primaryHover: '#b45309', accent: '#f59e0b' },
-        azul:     { primary: '#2563eb', primaryHover: '#1d4ed8', accent: '#3b82f6' },
-        verde:    { primary: '#059669', primaryHover: '#047857', accent: '#10b981' },
-        roxo:     { primary: '#7c3aed', primaryHover: '#6d28d9', accent: '#a78bfa' },
-        vermelho: { primary: '#dc2626', primaryHover: '#b91c1c', accent: '#ef4444' }
-    };
-
-    const rotulosModo = { manual: 'Manual', automatico: 'Automático' };
-    const rotulosSom = { classico: 'Clássico', cassino: 'Cassino', suave: 'Suave', retro: 'Retrô', mudo: 'Mudo' };
-    const rotulosTema = { ambar: 'Âmbar', azul: 'Azul', verde: 'Verde', roxo: 'Roxo', vermelho: 'Vermelho' };
-
-    function aplicarTema(nome) {
-        const t = temas[nome] || temas.ambar;
-        document.documentElement.style.setProperty('--primary', t.primary);
-        document.documentElement.style.setProperty('--primary-hover', t.primaryHover);
-        document.documentElement.style.setProperty('--accent', t.accent);
-    }
-
-    // Gerador de som nativo do navegador (Web Audio API)
-    function tocarSom(frequencia, tipo, duracao, delay = 0) {
-        if (somAtual === 'mudo') return;
-
-        setTimeout(() => {
-            try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-                let oscilador = audioCtx.createOscillator();
-                let ganho = audioCtx.createGain();
-
-                oscilador.type = tipo; // 'sine', 'square', 'sawtooth', 'triangle'
-                oscilador.frequency.setValueAtTime(frequencia, audioCtx.currentTime);
-
-                ganho.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                ganho.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duracao);
-
-                oscilador.connect(ganho);
-                ganho.connect(audioCtx.destination);
-
-                oscilador.start();
-                oscilador.stop(audioCtx.currentTime + duracao);
-            } catch (e) {
-                console.log("Áudio bloqueado ou não suportado:", e);
-            }
-        }, delay);
-    }
-
-    function tocarSomInicio() {
-        const p = perfisSom[somAtual];
-        if (!p) return;
-        tocarSom(p.freq * 0.57, p.tipo, 0.15, 0);
-        tocarSom(p.freq * 0.86, p.tipo, 0.15, 100);
-        tocarSom(p.freq * 1.15, p.tipo, 0.3, 200);
-    }
-
-    function tocarSomRodada() {
-        const p = perfisSom[somAtual];
-        if (!p) return;
-        tocarSom(p.freq, p.tipo, 0.1, 0);
-    }
-
-    function tocarSomFinal() {
-        const p = perfisSom[somAtual];
-        if (!p) return;
-        // Fanfarra triunfal (tríade maior + oitava) na afinação do som escolhido
-        tocarSom(p.freq, p.tipo, 0.2, 0);
-        tocarSom(p.freq * 1.26, p.tipo, 0.2, 150);
-        tocarSom(p.freq * 1.5, p.tipo, 0.2, 300);
-        tocarSom(p.freq * 2, p.tipo, 0.5, 450);
-    }
-
-    function obterQuantidadeSelecionada() {
-        const select = document.getElementById('seletorQuantidade');
-        const ehManual = select.value === 'manual';
-        const bruto = ehManual ? document.getElementById('inputQuantidadeManual').value : select.value;
-
-        let valor = parseInt(bruto, 10);
-        if (isNaN(valor)) valor = 75;
-        valor = Math.min(200, Math.max(10, valor));
-
-        if (ehManual) document.getElementById('inputQuantidadeManual').value = valor;
-        return valor;
-    }
-
-    function salvarPreferencias() {
-        const ehManual = document.getElementById('seletorQuantidade').value === 'manual';
-        try {
-            localStorage.setItem(CHAVE_PREFS, JSON.stringify({
-                modo: modoJogo,
-                quantidade: totalBolas,
-                quantidadeManual: ehManual,
-                som: somAtual,
-                tema: temaAtual
-            }));
-        } catch (e) {
-            // localStorage indisponível (ex.: modo privado) - segue sem salvar
-        }
-    }
-
-    // Só aceita o valor salvo se ele bater com uma <option> existente,
-    // evitando que o select fique em branco com dados corrompidos ou desatualizados.
-    function definirSelectSeValido(select, valor) {
-        const existe = Array.from(select.options).some(opt => opt.value === String(valor));
-        if (existe) select.value = valor;
-        return existe;
-    }
-
-    function carregarPreferencias() {
-        try {
-            const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS));
-            if (!salvo) { atualizarChipsModo(); return; }
-
-            if (salvo.modo) {
-                const radio = document.querySelector(`input[name="modo"][value="${salvo.modo}"]`);
-                if (radio) radio.checked = true;
-            }
-
-            const seletorQuantidade = document.getElementById('seletorQuantidade');
-            const inputManual = document.getElementById('inputQuantidadeManual');
-            if (salvo.quantidadeManual && Number.isFinite(salvo.quantidade)) {
-                seletorQuantidade.value = 'manual';
-                inputManual.style.display = 'block';
-                inputManual.value = Math.min(200, Math.max(10, salvo.quantidade));
-            } else if (salvo.quantidade) {
-                definirSelectSeValido(seletorQuantidade, salvo.quantidade);
-            }
-
-            if (salvo.som) definirSelectSeValido(document.getElementById('seletorSom'), salvo.som);
-
-            if (salvo.tema && definirSelectSeValido(document.getElementById('seletorTema'), salvo.tema)) {
-                temaAtual = salvo.tema;
-                aplicarTema(temaAtual);
-            }
-        } catch (e) {
-            // preferências corrompidas - ignora e usa os padrões
-        }
-        atualizarChipsModo();
-    }
-
-    function atualizarChipsModo() {
-        document.querySelectorAll('#grupoModo .radio-chip').forEach(chip => {
-            const input = chip.querySelector('input');
-            chip.classList.toggle('selecionado', input.checked);
-        });
-    }
-
-    function iniciarJogo() {
-        modoJogo = document.querySelector('input[name="modo"]:checked').value;
-        totalBolas = obterQuantidadeSelecionada();
-        somAtual = document.getElementById('seletorSom').value;
-        temaAtual = document.getElementById('seletorTema').value;
-        aplicarTema(temaAtual);
-        salvarPreferencias();
-
-        rodada = 1;
-        sorteados = [];
-        numeros = [];
-        for (let i = 1; i <= totalBolas; i++) numeros.push(i);
-        autoRodando = false;
-        clearTimeout(autoTimeoutId);
-
-        tocarSomInicio();
-        document.getElementById("painelInicial").style.display = "none";
-        document.getElementById("painelJogo").style.display = "flex";
-        document.getElementById("rodadaTexto").innerText = "Globo pronto!";
-        document.getElementById("numeroSorteado").innerText = "--";
-        document.getElementById("numeroSorteado").classList.toggle("tres-digitos", totalBolas >= 100);
-        document.getElementById("numerosFaltando").innerText = numeros.length;
-        document.getElementById("totalBolasLabel").innerText = totalBolas;
-        document.getElementById("statusAnimacao").innerText = "";
-        document.getElementById("historicoContainer").innerHTML =
-            '<div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">Nenhuma bola sorteada neste painel ainda.</div>';
-
-        document.getElementById("resumoModo").innerText = rotulosModo[modoJogo] || modoJogo;
-        document.getElementById("resumoQuantidade").innerText = totalBolas;
-        document.getElementById("resumoSom").innerText = rotulosSom[somAtual] || somAtual;
-        document.getElementById("resumoTema").innerText = rotulosTema[temaAtual] || temaAtual;
-
-        const controles = document.getElementById("areaControles");
-        if (modoJogo === 'automatico') {
-            controles.innerHTML = '<button id="btnAcao" onclick="alternarAuto()">Iniciar Sorteio Automático</button>';
-        } else {
-            controles.innerHTML = '<button id="btnAcao" onclick="sortearNumero()">Sortear Número</button>';
-        }
-    }
-
-    function voltarConfiguracoes() {
-        clearTimeout(autoTimeoutId);
-        autoRodando = false;
-        document.getElementById("painelJogo").style.display = "none";
-        document.getElementById("painelInicial").style.display = "block";
-    }
-
-    function alternarAuto() {
-        autoRodando = !autoRodando;
-        const btn = document.getElementById("btnAcao");
-
-        if (autoRodando) {
-            btn.innerText = "Pausar Sorteio";
-            cicloAutomatico();
-        } else {
-            btn.innerText = "Continuar Sorteio";
-            clearTimeout(autoTimeoutId);
-        }
-    }
-
-    function cicloAutomatico() {
-        if (!autoRodando || numeros.length === 0) return;
-        sortearNumero();
-    }
-
-    function formatarNumero(num) {
-        const largura = Math.max(2, String(totalBolas).length);
-        return String(num).padStart(largura, '0');
-    }
-
-    function sortearNumero() {
-        if (numeros.length === 0) return;
-
-        const btn = document.getElementById("btnAcao");
-        const status = document.getElementById("statusAnimacao");
-        const bola = document.getElementById("numeroSorteado");
-        const txtFaltando = document.getElementById("numerosFaltando");
-
-        btn.disabled = true;
-        bola.classList.add("animando");
-        status.innerText = "Misturando o globo de pedras .";
-
-        // Bipes sutis de rotação do globo
-        const p = perfisSom[somAtual];
-        if (p) {
-            tocarSom(p.freq * 0.29, p.tipo, 0.05, 0);
-            setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; tocarSom(p.freq * 0.34, p.tipo, 0.05, 0); }, 250);
-            setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; tocarSom(p.freq * 0.40, p.tipo, 0.05, 0); }, 500);
-        } else {
-            setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; }, 250);
-            setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; }, 500);
-        }
-
-        setTimeout(() => {
-            bola.classList.remove("animando");
-            status.innerText = "";
-
-            const indiceAleatorio = Math.floor(Math.random() * numeros.length);
-            const numeroSorteado = numeros[indiceAleatorio];
-
-            sorteados.push(numeroSorteado);
-            numeros.splice(indiceAleatorio, 1);
-
-            document.getElementById("rodadaTexto").innerText = `Rodada ${formatarNumero(rodada)}`;
-            bola.innerText = formatarNumero(numeroSorteado);
-
-            txtFaltando.innerText = numeros.length;
-
-            atualizarHistorico();
-
-            rodada++;
-
-            if (numeros.length === 0) {
-                tocarSomFinal();
-                dispararConfetes();
-                autoRodando = false;
-                clearTimeout(autoTimeoutId);
-                status.innerHTML = `<strong style='color: var(--accent);'>Fim do sorteio! Todas as ${totalBolas} pedras saíram.</strong>`;
-                btn.innerText = "Novo Jogo";
-                btn.onclick = voltarConfiguracoes;
-                btn.disabled = false;
-            } else {
-                tocarSomRodada();
-                btn.disabled = false;
-
-                if (modoJogo === 'automatico' && autoRodando) {
-                    autoTimeoutId = setTimeout(cicloAutomatico, 1800);
-                }
-            }
-        }, 750);
-    }
-
-    function atualizarHistorico() {
-        const container = document.getElementById("historicoContainer");
-
-        const itemVazio = document.getElementById("itemVazio");
-        if (itemVazio) itemVazio.remove();
-
-        const ultimoIndex = sorteados.length - 1;
-        const num = sorteados[ultimoIndex];
-
-        const item = document.createElement("div");
-        item.className = "item-historico";
-        item.innerHTML = `${formatarNumero(ultimoIndex + 1)}º nº:<strong>${formatarNumero(num)}</strong>`;
-
-        container.appendChild(item);
-        container.scrollTop = container.scrollHeight;
-    }
-
-    // Mecânica de Animação de Aniversário (Confetes)
-    function dispararConfetes() {
-        const cores = ['#fbbf24', '#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899'];
-
-        // Loop para gerar 150 pedaços de confete na tela
-        for (let i = 0; i < 150; i++) {
-            const confete = document.createElement('div');
-            confete.className = 'confete';
-
-            // Características randômicas para cada papel picado
-            confete.style.left = Math.random() * 100 + 'vw';
-            confete.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
-            confete.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Entre 2s e 5s para cair
-            confete.style.animationDelay = (Math.random() * 2) + 's'; // Cascata de queda de até 2s
-            confete.style.transform = `scale(${Math.random() * 1 + 0.5})`; // Tamanhos variados
-
-            document.body.appendChild(confete);
-
-            // Remove o elemento após a animação acabar para não acumular memória
-            setTimeout(() => { confete.remove(); }, 7000);
-        }
-    }
-
-    function abrirModal(id) {
-        document.getElementById(id).style.display = 'flex';
-    }
-
-    function fecharModal(id) {
-        document.getElementById(id).style.display = 'none';
-    }
-
-    function fecharModalClique(evento, id) {
-        if (evento.target.id === id) fecharModal(id);
-    }
-
-    document.addEventListener('keydown', evento => {
-        if (evento.key !== 'Escape') return;
-        ['modalSobre', 'modalPrivacidade'].forEach(id => {
-            if (document.getElementById(id).style.display === 'flex') fecharModal(id);
-        });
-    });
-
-    document.querySelectorAll('input[name="modo"]').forEach(input => {
-        input.addEventListener('change', atualizarChipsModo);
-    });
-
-    document.getElementById('seletorQuantidade').addEventListener('change', function () {
-        document.getElementById('inputQuantidadeManual').style.display = this.value === 'manual' ? 'block' : 'none';
-    });
-
-    document.getElementById('seletorTema').addEventListener('change', function () {
-        aplicarTema(this.value);
-    });
-
-    carregarPreferencias();
-
-    // Registra o service worker para o app funcionar offline após a primeira visita.
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').catch(() => {
-                // Ambiente sem suporte (ex.: aberto via file://) - segue sem cache offline
-            });
-        });
-    }
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
