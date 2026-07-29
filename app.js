@@ -565,3 +565,28 @@ if ('serviceWorker' in navigator) {
         });
     });
 }
+
+// Botão "Instalar App": só aparece quando o navegador sinaliza que o PWA é instalável
+// (hoje isso é suportado por navegadores baseados em Chromium; Firefox/Safari não disparam esse evento).
+let eventoInstalacaoAdiado = null;
+
+window.addEventListener('beforeinstallprompt', evento => {
+    evento.preventDefault();
+    eventoInstalacaoAdiado = evento;
+    document.getElementById('btnInstalarApp').classList.remove('oculto');
+    document.getElementById('separadorInstalar').classList.remove('oculto');
+});
+
+document.getElementById('btnInstalarApp').addEventListener('click', async () => {
+    if (!eventoInstalacaoAdiado) return;
+    eventoInstalacaoAdiado.prompt();
+    await eventoInstalacaoAdiado.userChoice;
+    eventoInstalacaoAdiado = null;
+    document.getElementById('btnInstalarApp').classList.add('oculto');
+    document.getElementById('separadorInstalar').classList.add('oculto');
+});
+
+window.addEventListener('appinstalled', () => {
+    document.getElementById('btnInstalarApp').classList.add('oculto');
+    document.getElementById('separadorInstalar').classList.add('oculto');
+});
