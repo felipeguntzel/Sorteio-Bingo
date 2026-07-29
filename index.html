@@ -82,22 +82,32 @@
             color: var(--accent);
         }
 
-        /* Espaço reservado para anúncios (ex.: Google AdSense). Ocultado automaticamente se ficar vazio. */
+        /* Espaços reservados para anúncios (ex.: Google AdSense). Ficam em branco até um script de anúncio ser inserido. */
         .ad-slot {
             width: 100%;
             min-height: 60px;
             margin-top: 16px;
             border: 1px dashed var(--divider);
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 12px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
             background: rgba(15, 23, 42, 0.3);
             flex-shrink: 0;
+        }
+
+        .ad-slot-lateral {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            height: min(600px, 70vh);
+            z-index: 1;
+            display: none;
+        }
+
+        .ad-slot-esquerda { left: 24px; }
+        .ad-slot-direita { right: 24px; }
+
+        @media (min-width: 1800px) {
+            .ad-slot-lateral { display: block; }
         }
 
         .main-content {
@@ -179,13 +189,47 @@
             margin-top: 6px;
         }
 
+        #inputQuantidadeManual {
+            margin-top: 8px;
+        }
+
         #painelJogo {
             width: 100%;
             height: 100%;
             display: flex;
-            gap: 30px;
+            flex-direction: column;
+            gap: 12px;
             overflow: hidden;
             padding: 20px 0;
+        }
+
+        .resumo-config {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 18px;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--divider);
+            border-radius: 10px;
+            padding: 10px 16px;
+            flex-shrink: 0;
+        }
+
+        .resumo-config strong {
+            color: var(--text-main);
+            font-weight: 700;
+            margin-right: 4px;
+        }
+
+        .painel-colunas {
+            flex: 1;
+            display: flex;
+            gap: 30px;
+            overflow: hidden;
+            min-height: 0;
         }
 
         .coluna-esquerda {
@@ -230,6 +274,10 @@
             box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
             margin-bottom: 20px;
             transition: transform 0.15s ease;
+        }
+
+        .bola-bingo.tres-digitos {
+            font-size: 52px;
         }
 
         .animando {
@@ -313,7 +361,7 @@
             padding: 20px;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             grid-auto-rows: max-content;
             gap: 12px;
             align-content: start;
@@ -457,7 +505,7 @@
                 border-radius: 16px;
             }
 
-            #painelJogo {
+            .painel-colunas {
                 flex-direction: column;
                 gap: 15px;
             }
@@ -478,10 +526,21 @@
                 height: 130px;
                 font-size: 56px;
             }
+
+            .bola-bingo.tres-digitos {
+                font-size: 42px;
+            }
+
+            .ad-slot-lateral {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body>
+
+<div class="ad-slot ad-slot-lateral ad-slot-esquerda" id="adSlotEsquerda"></div>
+<div class="ad-slot ad-slot-lateral ad-slot-direita" id="adSlotDireita"></div>
 
 <div class="app-window">
     <header>
@@ -493,7 +552,7 @@
         <h1>BINGO <span>PRO</span></h1>
     </header>
 
-    <div class="ad-slot" id="adSlot">Espaço reservado para anúncios</div>
+    <div class="ad-slot" id="adSlot"></div>
 
     <main class="main-content">
         <div id="painelInicial">
@@ -513,7 +572,9 @@
                     <option value="30">30 bolas (Bingo rápido)</option>
                     <option value="75" selected>75 bolas (Bingo tradicional)</option>
                     <option value="90">90 bolas (Bingo europeu)</option>
+                    <option value="manual">Outro (digitar valor)</option>
                 </select>
+                <input type="number" id="inputQuantidadeManual" class="config-select" min="10" max="200" step="1" placeholder="Digite de 10 a 200" style="display: none;">
             </div>
 
             <div class="config-grupo">
@@ -527,25 +588,46 @@
                 </select>
             </div>
 
+            <div class="config-grupo">
+                <label class="config-label" for="seletorTema">Tema (cor)</label>
+                <select id="seletorTema" class="config-select">
+                    <option value="ambar" selected>Âmbar (padrão)</option>
+                    <option value="azul">Azul</option>
+                    <option value="verde">Verde</option>
+                    <option value="roxo">Roxo</option>
+                    <option value="vermelho">Vermelho</option>
+                </select>
+            </div>
+
             <button onclick="iniciarJogo()">Abrir Sala de Jogo</button>
         </div>
 
         <div id="painelJogo" style="display: none;">
-            <div class="coluna-esquerda">
-                <div id="rodadaTexto">Gire o Globo!</div>
-                <div class="bola-bingo" id="numeroSorteado">--</div>
-                <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / <span id="totalBolasLabel">75</span></div>
-                <div class="status" id="statusAnimacao"></div>
-                <div id="areaControles">
-                    <button id="btnAcao" onclick="sortearNumero()">Sortear Número</button>
-                </div>
+            <div class="resumo-config" id="resumoConfig">
+                <span><strong>Modo:</strong> <span id="resumoModo"></span></span>
+                <span><strong>Bolas:</strong> <span id="resumoQuantidade"></span></span>
+                <span><strong>Som:</strong> <span id="resumoSom"></span></span>
+                <span><strong>Tema:</strong> <span id="resumoTema"></span></span>
+                <button class="link-botao" onclick="voltarConfiguracoes()">Alterar configurações</button>
             </div>
 
-            <div class="coluna-direita">
-                <h3>Histórico das Rodadas</h3>
-                <div class="historico-container" id="historicoContainer">
-                    <div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">
-                        Nenhuma bola sorteada neste painel ainda.
+            <div class="painel-colunas">
+                <div class="coluna-esquerda">
+                    <div id="rodadaTexto">Gire o Globo!</div>
+                    <div class="bola-bingo" id="numeroSorteado">--</div>
+                    <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / <span id="totalBolasLabel">75</span></div>
+                    <div class="status" id="statusAnimacao"></div>
+                    <div id="areaControles">
+                        <button id="btnAcao" onclick="sortearNumero()">Sortear Número</button>
+                    </div>
+                </div>
+
+                <div class="coluna-direita">
+                    <h3>Histórico das Rodadas</h3>
+                    <div class="historico-container" id="historicoContainer">
+                        <div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">
+                            Nenhuma bola sorteada neste painel ainda.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -564,7 +646,7 @@
 <div class="modal-overlay" id="modalSobre" onclick="fecharModalClique(event, 'modalSobre')">
     <div class="modal-box">
         <h2>Sobre o Bingo Pro</h2>
-        <p>Bingo Pro é um sorteador eletrônico de bingo gratuito, feito para ser simples e direto: escolha o modo manual ou automático, a quantidade de bolas (30, 75 ou 90) e o som, e comece a sortear.</p>
+        <p>Bingo Pro é um sorteador eletrônico de bingo gratuito, feito para ser simples e direto: escolha o modo manual ou automático, a quantidade de bolas (30, 75, 90 ou um valor entre 10 e 200), o som e o tema de cor, e comece a sortear.</p>
         <p>Todo o jogo roda no seu navegador, sem instalação e sem necessidade de conta.</p>
         <button onclick="fecharModal('modalSobre')">Fechar</button>
     </div>
@@ -579,7 +661,7 @@
             <li>Não coletamos seu endereço IP.</li>
             <li>Não guardamos nenhuma informação pessoal em servidores.</li>
         </ul>
-        <p>Salvamos apenas, no armazenamento local do seu próprio navegador, as suas últimas preferências de uso: modo escolhido, quantidade de bolas e som. Esses dados nunca saem do seu dispositivo.</p>
+        <p>Salvamos apenas, no armazenamento local do seu próprio navegador, as suas últimas preferências de uso: modo escolhido, quantidade de bolas, som e tema. Esses dados nunca saem do seu dispositivo.</p>
         <button onclick="fecharModal('modalPrivacidade')">Fechar</button>
     </div>
 </div>
@@ -593,6 +675,7 @@
     let modoJogo = 'manual';
     let totalBolas = 75;
     let somAtual = 'classico';
+    let temaAtual = 'ambar';
     let autoRodando = false;
     let autoTimeoutId = null;
 
@@ -605,6 +688,25 @@
         retro:    { tipo: 'sawtooth', freq: 349.23 },
         mudo:     null
     };
+
+    const temas = {
+        ambar:    { primary: '#d97706', primaryHover: '#b45309', accent: '#f59e0b' },
+        azul:     { primary: '#2563eb', primaryHover: '#1d4ed8', accent: '#3b82f6' },
+        verde:    { primary: '#059669', primaryHover: '#047857', accent: '#10b981' },
+        roxo:     { primary: '#7c3aed', primaryHover: '#6d28d9', accent: '#a78bfa' },
+        vermelho: { primary: '#dc2626', primaryHover: '#b91c1c', accent: '#ef4444' }
+    };
+
+    const rotulosModo = { manual: 'Manual', automatico: 'Automático' };
+    const rotulosSom = { classico: 'Clássico', cassino: 'Cassino', suave: 'Suave', retro: 'Retrô', mudo: 'Mudo' };
+    const rotulosTema = { ambar: 'Âmbar', azul: 'Azul', verde: 'Verde', roxo: 'Roxo', vermelho: 'Vermelho' };
+
+    function aplicarTema(nome) {
+        const t = temas[nome] || temas.ambar;
+        document.documentElement.style.setProperty('--primary', t.primary);
+        document.documentElement.style.setProperty('--primary-hover', t.primaryHover);
+        document.documentElement.style.setProperty('--accent', t.accent);
+    }
 
     // Gerador de som nativo do navegador (Web Audio API)
     function tocarSom(frequencia, tipo, duracao, delay = 0) {
@@ -658,12 +760,28 @@
         tocarSom(p.freq * 2, p.tipo, 0.5, 450);
     }
 
+    function obterQuantidadeSelecionada() {
+        const select = document.getElementById('seletorQuantidade');
+        if (select.value === 'manual') {
+            const input = document.getElementById('inputQuantidadeManual');
+            let valor = parseInt(input.value, 10);
+            if (isNaN(valor)) valor = 75;
+            valor = Math.min(200, Math.max(10, valor));
+            input.value = valor;
+            return valor;
+        }
+        return parseInt(select.value, 10);
+    }
+
     function salvarPreferencias() {
+        const ehManual = document.getElementById('seletorQuantidade').value === 'manual';
         try {
             localStorage.setItem(CHAVE_PREFS, JSON.stringify({
                 modo: modoJogo,
                 quantidade: totalBolas,
-                som: somAtual
+                quantidadeManual: ehManual,
+                som: somAtual,
+                tema: temaAtual
             }));
         } catch (e) {
             // localStorage indisponível (ex.: modo privado) - segue sem salvar
@@ -673,14 +791,25 @@
     function carregarPreferencias() {
         try {
             const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS));
-            if (!salvo) return;
+            if (!salvo) { atualizarChipsModo(); return; }
 
             if (salvo.modo) {
                 const radio = document.querySelector(`input[name="modo"][value="${salvo.modo}"]`);
                 if (radio) radio.checked = true;
             }
-            if (salvo.quantidade) document.getElementById('seletorQuantidade').value = salvo.quantidade;
+            if (salvo.quantidadeManual) {
+                document.getElementById('seletorQuantidade').value = 'manual';
+                document.getElementById('inputQuantidadeManual').style.display = 'block';
+                document.getElementById('inputQuantidadeManual').value = salvo.quantidade;
+            } else if (salvo.quantidade) {
+                document.getElementById('seletorQuantidade').value = salvo.quantidade;
+            }
             if (salvo.som) document.getElementById('seletorSom').value = salvo.som;
+            if (salvo.tema) {
+                document.getElementById('seletorTema').value = salvo.tema;
+                temaAtual = salvo.tema;
+                aplicarTema(temaAtual);
+            }
         } catch (e) {
             // preferências corrompidas - ignora e usa os padrões
         }
@@ -696,8 +825,10 @@
 
     function iniciarJogo() {
         modoJogo = document.querySelector('input[name="modo"]:checked').value;
-        totalBolas = parseInt(document.getElementById('seletorQuantidade').value, 10);
+        totalBolas = obterQuantidadeSelecionada();
         somAtual = document.getElementById('seletorSom').value;
+        temaAtual = document.getElementById('seletorTema').value;
+        aplicarTema(temaAtual);
         salvarPreferencias();
 
         rodada = 1;
@@ -712,11 +843,17 @@
         document.getElementById("painelJogo").style.display = "flex";
         document.getElementById("rodadaTexto").innerText = "Globo pronto!";
         document.getElementById("numeroSorteado").innerText = "--";
+        document.getElementById("numeroSorteado").classList.toggle("tres-digitos", totalBolas >= 100);
         document.getElementById("numerosFaltando").innerText = numeros.length;
         document.getElementById("totalBolasLabel").innerText = totalBolas;
         document.getElementById("statusAnimacao").innerText = "";
         document.getElementById("historicoContainer").innerHTML =
             '<div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">Nenhuma bola sorteada neste painel ainda.</div>';
+
+        document.getElementById("resumoModo").innerText = rotulosModo[modoJogo];
+        document.getElementById("resumoQuantidade").innerText = totalBolas;
+        document.getElementById("resumoSom").innerText = rotulosSom[somAtual];
+        document.getElementById("resumoTema").innerText = rotulosTema[temaAtual];
 
         const controles = document.getElementById("areaControles");
         if (modoJogo === 'automatico') {
@@ -752,7 +889,8 @@
     }
 
     function formatarNumero(num) {
-        return String(num).padStart(2, '0');
+        const largura = Math.max(2, String(totalBolas).length);
+        return String(num).padStart(largura, '0');
     }
 
     function sortearNumero() {
@@ -871,6 +1009,14 @@
 
     document.querySelectorAll('input[name="modo"]').forEach(input => {
         input.addEventListener('change', atualizarChipsModo);
+    });
+
+    document.getElementById('seletorQuantidade').addEventListener('change', function () {
+        document.getElementById('inputQuantidadeManual').style.display = this.value === 'manual' ? 'block' : 'none';
+    });
+
+    document.getElementById('seletorTema').addEventListener('change', function () {
+        aplicarTema(this.value);
     });
 
     carregarPreferencias();
