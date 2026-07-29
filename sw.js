@@ -1,13 +1,16 @@
-const CACHE_NAME = 'bingo-pro-v2';
+const CACHE_NAME = 'bingo-pro-v3';
 const ARQUIVOS_APP_SHELL = [
     './',
     './index.html',
+    './guia.html',
     './styles.css',
     './app.js',
     './manifest.json',
     './icon-192.png',
     './icon-512.png',
-    './icon-maskable.png'
+    './icon-maskable.png',
+    './og-image.png',
+    './favicon.ico'
 ];
 
 self.addEventListener('install', event => {

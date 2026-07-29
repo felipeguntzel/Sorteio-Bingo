@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sorteio-bingo.pages.dev/sitemap.xml

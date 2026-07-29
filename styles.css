@@ -20,6 +20,136 @@
     display: none;
 }
 
+body.pagina-guia {
+    display: block;
+    overflow: auto;
+    align-items: initial;
+    justify-content: initial;
+    padding: 0;
+}
+
+.cabecalho-site {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 20px;
+    border-bottom: 2px dashed var(--divider);
+}
+
+.cabecalho-site .logo-icon {
+    width: 36px;
+    height: 36px;
+}
+
+.cabecalho-site h1 {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.cabecalho-site h1 span {
+    color: var(--accent);
+}
+
+.pagina-conteudo {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 50px 24px 100px;
+}
+
+.pagina-conteudo h2 {
+    font-size: 28px;
+    margin-bottom: 6px;
+    color: var(--text-main);
+}
+
+.pagina-conteudo .subtitulo {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.pagina-conteudo h3 {
+    color: var(--accent);
+    font-size: 20px;
+    margin: 34px 0 12px;
+}
+
+.pagina-conteudo p,
+.pagina-conteudo li {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.pagina-conteudo ul {
+    margin-left: 20px;
+}
+
+.pagina-conteudo table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+}
+
+.pagina-conteudo th,
+.pagina-conteudo td {
+    border: 1px solid var(--divider);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.pagina-conteudo th {
+    color: var(--text-main);
+    background: rgba(15, 23, 42, 0.4);
+}
+
+.cartao-cta {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--divider);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.cartao-cta p {
+    margin-bottom: 16px;
+}
+
+.cartao-cta a.botao-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: var(--text-main);
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+.rodape-site {
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--divider);
+}
+
+.rodape-site strong {
+    color: var(--accent);
+}
+
+.rodape-site a {
+    color: var(--text-muted);
+}
+
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background-color: var(--bg-main);
