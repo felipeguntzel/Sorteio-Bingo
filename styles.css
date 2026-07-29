@@ -212,12 +212,14 @@ h1 span {
 
 .ad-slot {
     width: 100%;
-    min-height: 60px;
-    margin: clamp(12px, 2vw, 16px) 0;
-    border: 1px dashed var(--divider);
-    border-radius: 10px;
-    background: rgba(15, 23, 42, 0.3);
+    min-height: 50px;
+    max-height: 90px;
+    margin: 8px 0;
+    border: 1px dashed rgba(51, 65, 85, 0.5);
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.2);
     flex-shrink: 0;
+    opacity: 0.7;
 }
 
 .ad-slot-lateral {
@@ -226,12 +228,12 @@ h1 span {
     height: auto;
     margin: 0;
     z-index: 1;
-    display: none;
+    display: none !important;
 }
 
 .ad-slot-esquerda,
 .ad-slot-direita {
-    margin-bottom: clamp(12px, 2vw, 16px);
+    display: none !important;
 }
 
 @media (min-width: 1920px) {
@@ -239,14 +241,25 @@ h1 span {
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
-        width: 160px;
-        height: min(600px, 70vh);
+        width: 140px;
+        height: min(500px, 60vh);
         margin: 0;
-        display: block;
+        display: block !important;
+        opacity: 0.8;
+        border: 1px dashed rgba(51, 65, 85, 0.5);
+        background: rgba(15, 23, 42, 0.2);
+        border-radius: 8px;
     }
 
-    .ad-slot-esquerda { left: 24px; }
-    .ad-slot-direita { right: 24px; }
+    .ad-slot-esquerda {
+        left: 12px;
+        display: block !important;
+    }
+
+    .ad-slot-direita {
+        right: 12px;
+        display: block !important;
+    }
 }
 
 .main-content {
