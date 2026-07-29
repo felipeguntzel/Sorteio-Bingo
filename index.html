@@ -257,6 +257,22 @@
             margin-top: 2px;
         }
 
+        .app-footer {
+            position: fixed;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            z-index: 1;
+        }
+
+        .app-footer strong {
+            color: var(--accent);
+        }
+
         /* Estilos dos Elementos de Confete */
         .confete {
             position: absolute;
@@ -318,6 +334,8 @@
         </div>
     </main>
 </div>
+
+<footer class="app-footer">Desenvolvido por <strong>Guntzel Tech</strong></footer>
 
 <script>
     let rodada = 1;
@@ -426,12 +444,33 @@
                 tocarSomFinal();
                 dispararConfetes();
                 status.innerHTML = "<strong style='color: var(--accent);'>Fim do sorteio! Todas as 75 pedras saíram.</strong>";
-                btn.disabled = true;
-                btn.innerText = "Concluído";
+                btn.innerText = "Novo Jogo";
+                btn.onclick = reiniciarJogo;
+                btn.disabled = false;
             } else {
                 tocarSomRodada();
             }
         }, 750);
+    }
+
+    function reiniciarJogo() {
+        rodada = 1;
+        numeros = [];
+        sorteados = [];
+        for (let i = 1; i <= 75; i++) numeros.push(i);
+
+        document.getElementById("numeroSorteado").innerText = "--";
+        document.getElementById("rodadaTexto").innerText = "Globo pronto!";
+        document.getElementById("numerosFaltando").innerText = numeros.length;
+        document.getElementById("statusAnimacao").innerText = "";
+
+        document.getElementById("historicoContainer").innerHTML =
+            '<div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">Nenhuma bola sorteada neste painel ainda.</div>';
+
+        const btn = document.getElementById("btnSortear");
+        btn.innerText = "Sortear Número";
+        btn.onclick = sortearNumero;
+        btn.disabled = false;
     }
 
     function atualizarHistorico() {
