@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bingo Pro - Sorteio Eletrônico</title>
-    
+    <meta name="description" content="Bingo Pro: sorteador eletrônico de bingo grátis, direto no navegador. Modo manual ou automático, 30/75/90 bolas, sons e histórico das rodadas.">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%231e293b%22 stroke=%22%23fbbf24%22 stroke-width=%226%22/><circle cx=%2245%22 cy=%2245%22 r=%2222%22 fill=%22%23ffffff%22/><text x=%2250%22 y=%2268%22 font-family=%22sans-serif%22 font-size=%2252%22 font-weight=%22900%22 fill=%22%23dc2626%22 text-anchor=%22middle%22>75</text></svg>">
 
     <style>
         :root {
-            --bg-main: #0f172a;       
-            --bg-card: #1e293b;       
-            --primary: #d97706;       
-            --primary-hover: #b45309; 
-            --accent: #f59e0b;        
-            --ball-text: #dc2626;     
-            --text-main: #f8fafc;     
-            --text-muted: #94a3b8;    
-            --divider: #334155;       
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --primary: #d97706;
+            --primary-hover: #b45309;
+            --accent: #f59e0b;
+            --ball-text: #dc2626;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --divider: #334155;
         }
 
         * {
@@ -81,6 +82,24 @@
             color: var(--accent);
         }
 
+        /* Espaço reservado para anúncios (ex.: Google AdSense). Ocultado automaticamente se ficar vazio. */
+        .ad-slot {
+            width: 100%;
+            min-height: 60px;
+            margin-top: 16px;
+            border: 1px dashed var(--divider);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: rgba(15, 23, 42, 0.3);
+            flex-shrink: 0;
+        }
+
         .main-content {
             flex: 1;
             display: flex;
@@ -92,12 +111,72 @@
 
         #painelInicial {
             text-align: center;
+            width: 100%;
+            max-width: 380px;
+            max-height: 100%;
+            overflow-y: auto;
+            padding: 6px;
         }
 
         #painelInicial p {
             color: var(--text-muted);
-            font-size: 18px;
-            margin-bottom: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .config-grupo {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .config-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .config-opcoes {
+            display: flex;
+            gap: 10px;
+        }
+
+        .radio-chip {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border: 1px solid var(--divider);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            background: rgba(15, 23, 42, 0.4);
+            transition: all 0.15s ease;
+        }
+
+        .radio-chip.selecionado {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .config-select {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--divider);
+            background: rgba(15, 23, 42, 0.4);
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        #painelInicial button {
+            width: 100%;
+            margin-top: 6px;
         }
 
         #painelJogo {
@@ -174,7 +253,7 @@
             margin-bottom: 25px;
             letter-spacing: 0.05em;
         }
-        
+
         .contador-restante span {
             color: var(--accent);
             font-weight: 800;
@@ -257,6 +336,99 @@
             margin-top: 2px;
         }
 
+        .app-footer {
+            position: fixed;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            z-index: 1;
+        }
+
+        .app-footer strong {
+            color: var(--accent);
+        }
+
+        .footer-separador {
+            margin: 0 8px;
+            opacity: 0.5;
+        }
+
+        .link-botao {
+            background: none;
+            border: none;
+            padding: 0;
+            font: inherit;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-decoration: underline;
+            cursor: pointer;
+            box-shadow: none;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .link-botao:hover {
+            color: var(--accent);
+            transform: none;
+            box-shadow: none;
+            filter: none;
+        }
+
+        /* Modais de Sobre / Privacidade */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-box h2 {
+            color: var(--accent);
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .modal-box p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .modal-box ul {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 12px 20px;
+        }
+
+        .modal-box button {
+            margin-top: 10px;
+            padding: 12px 30px;
+            font-size: 14px;
+        }
+
         /* Estilos dos Elementos de Confete */
         .confete {
             position: absolute;
@@ -278,6 +450,35 @@
                 opacity: 0;
             }
         }
+
+        @media (max-width: 640px) {
+            .app-window {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            #painelJogo {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .coluna-esquerda {
+                border-right: none;
+                border-bottom: 2px dashed var(--divider);
+                padding-right: 0;
+                padding-bottom: 15px;
+            }
+
+            .coluna-direita {
+                padding-left: 0;
+            }
+
+            .bola-bingo {
+                width: 130px;
+                height: 130px;
+                font-size: 56px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -291,10 +492,41 @@
         </svg>
         <h1>BINGO <span>PRO</span></h1>
     </header>
-    
+
+    <div class="ad-slot" id="adSlot">Espaço reservado para anúncios</div>
+
     <main class="main-content">
         <div id="painelInicial">
-            <p>Prepare o seu bilhete! Pronto para iniciar o sorteio oficial?</p>
+            <p>Configure o sorteio e prepare o seu bilhete!</p>
+
+            <div class="config-grupo">
+                <span class="config-label">Modo de sorteio</span>
+                <div class="config-opcoes" id="grupoModo">
+                    <label class="radio-chip"><input type="radio" name="modo" value="manual" checked> Manual</label>
+                    <label class="radio-chip"><input type="radio" name="modo" value="automatico"> Automático</label>
+                </div>
+            </div>
+
+            <div class="config-grupo">
+                <label class="config-label" for="seletorQuantidade">Quantidade de bolas</label>
+                <select id="seletorQuantidade" class="config-select">
+                    <option value="30">30 bolas (Bingo rápido)</option>
+                    <option value="75" selected>75 bolas (Bingo tradicional)</option>
+                    <option value="90">90 bolas (Bingo europeu)</option>
+                </select>
+            </div>
+
+            <div class="config-grupo">
+                <label class="config-label" for="seletorSom">Som</label>
+                <select id="seletorSom" class="config-select">
+                    <option value="classico" selected>Clássico</option>
+                    <option value="cassino">Cassino</option>
+                    <option value="suave">Suave</option>
+                    <option value="retro">Retrô</option>
+                    <option value="mudo">Mudo</option>
+                </select>
+            </div>
+
             <button onclick="iniciarJogo()">Abrir Sala de Jogo</button>
         </div>
 
@@ -302,9 +534,11 @@
             <div class="coluna-esquerda">
                 <div id="rodadaTexto">Gire o Globo!</div>
                 <div class="bola-bingo" id="numeroSorteado">--</div>
-                <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / 75</div>
+                <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / <span id="totalBolasLabel">75</span></div>
                 <div class="status" id="statusAnimacao"></div>
-                <button id="btnSortear" onclick="sortearNumero()">Sortear Número</button>
+                <div id="areaControles">
+                    <button id="btnAcao" onclick="sortearNumero()">Sortear Número</button>
+                </div>
             </div>
 
             <div class="coluna-direita">
@@ -319,34 +553,79 @@
     </main>
 </div>
 
+<footer class="app-footer">
+    <button class="link-botao" onclick="abrirModal('modalSobre')">Sobre</button>
+    <span class="footer-separador">·</span>
+    <button class="link-botao" onclick="abrirModal('modalPrivacidade')">Privacidade</button>
+    <span class="footer-separador">·</span>
+    Desenvolvido por <strong>Guntzel Tech</strong>
+</footer>
+
+<div class="modal-overlay" id="modalSobre" onclick="fecharModalClique(event, 'modalSobre')">
+    <div class="modal-box">
+        <h2>Sobre o Bingo Pro</h2>
+        <p>Bingo Pro é um sorteador eletrônico de bingo gratuito, feito para ser simples e direto: escolha o modo manual ou automático, a quantidade de bolas (30, 75 ou 90) e o som, e comece a sortear.</p>
+        <p>Todo o jogo roda no seu navegador, sem instalação e sem necessidade de conta.</p>
+        <button onclick="fecharModal('modalSobre')">Fechar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalPrivacidade" onclick="fecharModalClique(event, 'modalPrivacidade')">
+    <div class="modal-box">
+        <h2>Política de Privacidade</h2>
+        <ul>
+            <li>Não pedimos login nem senha.</li>
+            <li>Não coletamos sua localização.</li>
+            <li>Não coletamos seu endereço IP.</li>
+            <li>Não guardamos nenhuma informação pessoal em servidores.</li>
+        </ul>
+        <p>Salvamos apenas, no armazenamento local do seu próprio navegador, as suas últimas preferências de uso: modo escolhido, quantidade de bolas e som. Esses dados nunca saem do seu dispositivo.</p>
+        <button onclick="fecharModal('modalPrivacidade')">Fechar</button>
+    </div>
+</div>
+
 <script>
     let rodada = 1;
     let numeros = [];
     let sorteados = [];
     let audioCtx = null;
 
-    for (let i = 1; i <= 75; i++) {
-        numeros.push(i);
-    }
+    let modoJogo = 'manual';
+    let totalBolas = 75;
+    let somAtual = 'classico';
+    let autoRodando = false;
+    let autoTimeoutId = null;
+
+    const CHAVE_PREFS = 'bingoPro.preferencias';
+
+    const perfisSom = {
+        classico: { tipo: 'sine',     freq: 523.25 },
+        cassino:  { tipo: 'square',   freq: 587.33 },
+        suave:    { tipo: 'triangle', freq: 440.00 },
+        retro:    { tipo: 'sawtooth', freq: 349.23 },
+        mudo:     null
+    };
 
     // Gerador de som nativo do navegador (Web Audio API)
     function tocarSom(frequencia, tipo, duracao, delay = 0) {
+        if (somAtual === 'mudo') return;
+
         setTimeout(() => {
             try {
                 if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
+
                 let oscilador = audioCtx.createOscillator();
                 let ganho = audioCtx.createGain();
-                
+
                 oscilador.type = tipo; // 'sine', 'square', 'sawtooth', 'triangle'
                 oscilador.frequency.setValueAtTime(frequencia, audioCtx.currentTime);
-                
+
                 ganho.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 ganho.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duracao);
-                
+
                 oscilador.connect(ganho);
                 ganho.connect(audioCtx.destination);
-                
+
                 oscilador.start();
                 oscilador.stop(audioCtx.currentTime + duracao);
             } catch (e) {
@@ -356,29 +635,120 @@
     }
 
     function tocarSomInicio() {
-        tocarSom(300, 'triangle', 0.15, 0);
-        tocarSom(450, 'triangle', 0.15, 100);
-        tocarSom(600, 'triangle', 0.3, 200);
+        const p = perfisSom[somAtual];
+        if (!p) return;
+        tocarSom(p.freq * 0.57, p.tipo, 0.15, 0);
+        tocarSom(p.freq * 0.86, p.tipo, 0.15, 100);
+        tocarSom(p.freq * 1.15, p.tipo, 0.3, 200);
     }
 
     function tocarSomRodada() {
-        tocarSom(523.25, 'sine', 0.1, 0); // Nota C5 rápida
+        const p = perfisSom[somAtual];
+        if (!p) return;
+        tocarSom(p.freq, p.tipo, 0.1, 0);
     }
 
     function tocarSomFinal() {
-        // Fanfarra triunfal clássica de vitória
-        tocarSom(523.25, 'square', 0.2, 0);   // C5
-        tocarSom(659.25, 'square', 0.2, 150); // E5
-        tocarSom(783.99, 'square', 0.2, 300); // G5
-        tocarSom(1046.50, 'square', 0.5, 450); // C6 sustentado
+        const p = perfisSom[somAtual];
+        if (!p) return;
+        // Fanfarra triunfal (tríade maior + oitava) na afinação do som escolhido
+        tocarSom(p.freq, p.tipo, 0.2, 0);
+        tocarSom(p.freq * 1.26, p.tipo, 0.2, 150);
+        tocarSom(p.freq * 1.5, p.tipo, 0.2, 300);
+        tocarSom(p.freq * 2, p.tipo, 0.5, 450);
+    }
+
+    function salvarPreferencias() {
+        try {
+            localStorage.setItem(CHAVE_PREFS, JSON.stringify({
+                modo: modoJogo,
+                quantidade: totalBolas,
+                som: somAtual
+            }));
+        } catch (e) {
+            // localStorage indisponível (ex.: modo privado) - segue sem salvar
+        }
+    }
+
+    function carregarPreferencias() {
+        try {
+            const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS));
+            if (!salvo) return;
+
+            if (salvo.modo) {
+                const radio = document.querySelector(`input[name="modo"][value="${salvo.modo}"]`);
+                if (radio) radio.checked = true;
+            }
+            if (salvo.quantidade) document.getElementById('seletorQuantidade').value = salvo.quantidade;
+            if (salvo.som) document.getElementById('seletorSom').value = salvo.som;
+        } catch (e) {
+            // preferências corrompidas - ignora e usa os padrões
+        }
+        atualizarChipsModo();
+    }
+
+    function atualizarChipsModo() {
+        document.querySelectorAll('#grupoModo .radio-chip').forEach(chip => {
+            const input = chip.querySelector('input');
+            chip.classList.toggle('selecionado', input.checked);
+        });
     }
 
     function iniciarJogo() {
+        modoJogo = document.querySelector('input[name="modo"]:checked').value;
+        totalBolas = parseInt(document.getElementById('seletorQuantidade').value, 10);
+        somAtual = document.getElementById('seletorSom').value;
+        salvarPreferencias();
+
+        rodada = 1;
+        sorteados = [];
+        numeros = [];
+        for (let i = 1; i <= totalBolas; i++) numeros.push(i);
+        autoRodando = false;
+        clearTimeout(autoTimeoutId);
+
         tocarSomInicio();
         document.getElementById("painelInicial").style.display = "none";
         document.getElementById("painelJogo").style.display = "flex";
         document.getElementById("rodadaTexto").innerText = "Globo pronto!";
+        document.getElementById("numeroSorteado").innerText = "--";
         document.getElementById("numerosFaltando").innerText = numeros.length;
+        document.getElementById("totalBolasLabel").innerText = totalBolas;
+        document.getElementById("statusAnimacao").innerText = "";
+        document.getElementById("historicoContainer").innerHTML =
+            '<div id="itemVazio" style="color: var(--text-muted); font-style: italic; grid-column: 1 / -1; text-align: center; padding-top: 50px;">Nenhuma bola sorteada neste painel ainda.</div>';
+
+        const controles = document.getElementById("areaControles");
+        if (modoJogo === 'automatico') {
+            controles.innerHTML = '<button id="btnAcao" onclick="alternarAuto()">Iniciar Sorteio Automático</button>';
+        } else {
+            controles.innerHTML = '<button id="btnAcao" onclick="sortearNumero()">Sortear Número</button>';
+        }
+    }
+
+    function voltarConfiguracoes() {
+        clearTimeout(autoTimeoutId);
+        autoRodando = false;
+        document.getElementById("painelJogo").style.display = "none";
+        document.getElementById("painelInicial").style.display = "block";
+    }
+
+    function alternarAuto() {
+        autoRodando = !autoRodando;
+        const btn = document.getElementById("btnAcao");
+
+        if (autoRodando) {
+            btn.innerText = "Pausar Sorteio";
+            cicloAutomatico();
+        } else {
+            btn.innerText = "Continuar Sorteio";
+            clearTimeout(autoTimeoutId);
+        }
+    }
+
+    function cicloAutomatico() {
+        if (!autoRodando || numeros.length === 0) return;
+        sortearNumero();
     }
 
     function formatarNumero(num) {
@@ -388,24 +758,30 @@
     function sortearNumero() {
         if (numeros.length === 0) return;
 
-        const btn = document.getElementById("btnSortear");
+        const btn = document.getElementById("btnAcao");
         const status = document.getElementById("statusAnimacao");
         const bola = document.getElementById("numeroSorteado");
         const txtFaltando = document.getElementById("numerosFaltando");
-        
+
         btn.disabled = true;
         bola.classList.add("animando");
         status.innerText = "Misturando o globo de pedras .";
 
         // Bipes sutis de rotação do globo
-        tocarSom(150, 'sawtooth', 0.05, 0);
-        setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; tocarSom(180, 'sawtooth', 0.05, 0); }, 250);
-        setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; tocarSom(210, 'sawtooth', 0.05, 0); }, 500);
-        
+        const p = perfisSom[somAtual];
+        if (p) {
+            tocarSom(p.freq * 0.29, p.tipo, 0.05, 0);
+            setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; tocarSom(p.freq * 0.34, p.tipo, 0.05, 0); }, 250);
+            setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; tocarSom(p.freq * 0.40, p.tipo, 0.05, 0); }, 500);
+        } else {
+            setTimeout(() => { status.innerText = "Misturando o globo de pedras . ."; }, 250);
+            setTimeout(() => { status.innerText = "Misturando o globo de pedras . . ."; }, 500);
+        }
+
         setTimeout(() => {
             bola.classList.remove("animando");
             status.innerText = "";
-            
+
             const indiceAleatorio = Math.floor(Math.random() * numeros.length);
             const numeroSorteado = numeros[indiceAleatorio];
 
@@ -414,39 +790,46 @@
 
             document.getElementById("rodadaTexto").innerText = `Rodada ${formatarNumero(rodada)}`;
             bola.innerText = formatarNumero(numeroSorteado);
-            
+
             txtFaltando.innerText = numeros.length;
-            
+
             atualizarHistorico();
 
             rodada++;
-            btn.disabled = false;
 
             if (numeros.length === 0) {
                 tocarSomFinal();
                 dispararConfetes();
-                status.innerHTML = "<strong style='color: var(--accent);'>Fim do sorteio! Todas as 75 pedras saíram.</strong>";
-                btn.disabled = true;
-                btn.innerText = "Concluído";
+                autoRodando = false;
+                clearTimeout(autoTimeoutId);
+                status.innerHTML = `<strong style='color: var(--accent);'>Fim do sorteio! Todas as ${totalBolas} pedras saíram.</strong>`;
+                btn.innerText = "Novo Jogo";
+                btn.onclick = voltarConfiguracoes;
+                btn.disabled = false;
             } else {
                 tocarSomRodada();
+                btn.disabled = false;
+
+                if (modoJogo === 'automatico' && autoRodando) {
+                    autoTimeoutId = setTimeout(cicloAutomatico, 1800);
+                }
             }
         }, 750);
     }
 
     function atualizarHistorico() {
         const container = document.getElementById("historicoContainer");
-        
+
         const itemVazio = document.getElementById("itemVazio");
         if (itemVazio) itemVazio.remove();
-        
+
         const ultimoIndex = sorteados.length - 1;
         const num = sorteados[ultimoIndex];
-        
+
         const item = document.createElement("div");
         item.className = "item-historico";
         item.innerHTML = `${formatarNumero(ultimoIndex + 1)}º nº:<strong>${formatarNumero(num)}</strong>`;
-        
+
         container.appendChild(item);
         container.scrollTop = container.scrollHeight;
     }
@@ -454,25 +837,43 @@
     // Mecânica de Animação de Aniversário (Confetes)
     function dispararConfetes() {
         const cores = ['#fbbf24', '#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899'];
-        
+
         // Loop para gerar 150 pedaços de confete na tela
         for (let i = 0; i < 150; i++) {
             const confete = document.createElement('div');
             confete.className = 'confete';
-            
+
             // Características randômicas para cada papel picado
             confete.style.left = Math.random() * 100 + 'vw';
             confete.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
             confete.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Entre 2s e 5s para cair
             confete.style.animationDelay = (Math.random() * 2) + 's'; // Cascata de queda de até 2s
             confete.style.transform = `scale(${Math.random() * 1 + 0.5})`; // Tamanhos variados
-            
+
             document.body.appendChild(confete);
-            
+
             // Remove o elemento após a animação acabar para não acumular memória
             setTimeout(() => { confete.remove(); }, 7000);
         }
     }
+
+    function abrirModal(id) {
+        document.getElementById(id).style.display = 'flex';
+    }
+
+    function fecharModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    function fecharModalClique(evento, id) {
+        if (evento.target.id === id) fecharModal(id);
+    }
+
+    document.querySelectorAll('input[name="modo"]').forEach(input => {
+        input.addEventListener('change', atualizarChipsModo);
+    });
+
+    carregarPreferencias();
 </script>
 
 </body>
