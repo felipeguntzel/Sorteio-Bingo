@@ -85,7 +85,7 @@ function tocarSom(frequencia, tipo, duracao, delay = 0) {
             oscilador.start();
             oscilador.stop(audioCtx.currentTime + duracao);
         } catch (e) {
-            console.log("Áudio bloqueado ou não suportado:", e);
+            // Áudio bloqueado em alguns navegadores/modos - ignora silenciosamente
         }
     }, delay);
 }
@@ -115,20 +115,17 @@ function tocarSomFinal() {
 }
 
 function obterQuantidadeSelecionada() {
-    const select = document.getElementById('seletorQuantidade');
-    const ehManual = select.value === 'manual';
-    const bruto = ehManual ? document.getElementById('inputQuantidadeManual').value : select.value;
-
+    const ehManual = DOM.seletorQuantidade.value === 'manual';
+    const bruto = ehManual ? DOM.inputQuantidadeManual.value : DOM.seletorQuantidade.value;
     let valor = parseInt(bruto, 10);
-    if (isNaN(valor)) valor = 75;
+    if (!Number.isFinite(valor)) valor = 75;
     valor = Math.min(200, Math.max(10, valor));
-
-    if (ehManual) document.getElementById('inputQuantidadeManual').value = valor;
+    if (ehManual) DOM.inputQuantidadeManual.value = valor;
     return valor;
 }
 
 function salvarPreferencias() {
-    const ehManual = document.getElementById('seletorQuantidade').value === 'manual';
+    const ehManual = DOM.seletorQuantidade.value === 'manual';
     try {
         localStorage.setItem(CHAVE_PREFS, JSON.stringify({
             modo: modoJogo,
@@ -140,7 +137,7 @@ function salvarPreferencias() {
             intervalo: intervaloAutomaticoSegundos
         }));
     } catch (e) {
-        // localStorage indisponível (ex.: modo privado) - segue sem salvar
+        // localStorage indisponível - ignora silenciosamente
     }
 }
 
@@ -259,30 +256,32 @@ function atualizarContador() {
 
 function renderizarControles() {
     const controles = document.getElementById('areaControles');
+    controles.innerHTML = '';
 
     if (modoJogo === 'automatico') {
-        controles.innerHTML = `
-            <div class="controles-auto">
-                <div class="linha-intervalo">
-                    <label class="config-label" for="seletorIntervaloAoVivo">Intervalo entre sorteios</label>
-                    <select id="seletorIntervaloAoVivo" class="config-select">
-                        <option value="5">5 segundos</option>
-                        <option value="15">15 segundos</option>
-                        <option value="30">30 segundos</option>
-                        <option value="60">60 segundos</option>
-                        <option value="manual">Personalizado</option>
-                    </select>
-                    <input type="number" id="inputIntervaloAoVivo" class="config-select oculto" min="1" max="120" step="1" placeholder="Digite de 1 a 120 segundos" aria-label="Intervalo personalizado, de 1 a 120 segundos">
-                </div>
-                <div class="contagem-proxima" id="contagemProxima">Próximo sorteio em: <strong id="segundosRestantes">--</strong>s</div>
-                <div class="botoes-auto">
-                    <button id="btnPlay" class="btn-icone" type="button" title="Iniciar">▶</button>
-                    <button id="btnPause" class="btn-icone" type="button" title="Pausar" disabled>⏸</button>
-                    <button id="btnReiniciarAuto" class="btn-icone" type="button" title="Reiniciar sorteio">⟲</button>
-                </div>
-                ${repetirNumeros ? '<button id="btnEncerrarSorteio" class="btn-secundario" type="button">Encerrar sorteio</button>' : ''}
+        const divAuto = document.createElement('div');
+        divAuto.className = 'controles-auto';
+        divAuto.innerHTML = `
+            <div class="linha-intervalo">
+                <label class="config-label" for="seletorIntervaloAoVivo">Intervalo entre sorteios</label>
+                <select id="seletorIntervaloAoVivo" class="config-select">
+                    <option value="5">5 segundos</option>
+                    <option value="15">15 segundos</option>
+                    <option value="30">30 segundos</option>
+                    <option value="60">60 segundos</option>
+                    <option value="manual">Personalizado</option>
+                </select>
+                <input type="number" id="inputIntervaloAoVivo" class="config-select oculto" min="1" max="120" step="1" placeholder="Digite de 1 a 120 segundos" aria-label="Intervalo personalizado, de 1 a 120 segundos">
             </div>
+            <div class="contagem-proxima" id="contagemProxima">Próximo sorteio em: <strong id="segundosRestantes">--</strong>s</div>
+            <div class="botoes-auto">
+                <button id="btnPlay" class="btn-icone" type="button" title="Iniciar">▶</button>
+                <button id="btnPause" class="btn-icone" type="button" title="Pausar" disabled>⏸</button>
+                <button id="btnReiniciarAuto" class="btn-icone" type="button" title="Reiniciar sorteio">⟲</button>
+            </div>
+            ${repetirNumeros ? '<button id="btnEncerrarSorteio" class="btn-secundario" type="button">Encerrar sorteio</button>' : ''}
         `;
+        controles.appendChild(divAuto);
 
         const seletorIntervalo = document.getElementById('seletorIntervaloAoVivo');
         const inputIntervalo = document.getElementById('inputIntervaloAoVivo');
@@ -294,13 +293,17 @@ function renderizarControles() {
             inputIntervalo.value = intervaloAutomaticoSegundos;
         }
 
-        seletorIntervalo.addEventListener('change', () => {
-            inputIntervalo.classList.toggle('oculto', seletorIntervalo.value !== 'manual');
-            if (seletorIntervalo.value !== 'manual') {
-                definirIntervalo(parseInt(seletorIntervalo.value, 10));
+        seletorIntervalo.addEventListener('change', e => {
+            inputIntervalo.classList.toggle('oculto', e.target.value !== 'manual');
+            if (e.target.value !== 'manual') {
+                const val = parseInt(e.target.value, 10);
+                if (Number.isFinite(val)) definirIntervalo(val);
             }
         });
-        inputIntervalo.addEventListener('change', () => definirIntervalo(parseInt(inputIntervalo.value, 10)));
+        inputIntervalo.addEventListener('change', e => {
+            const val = parseInt(e.target.value, 10);
+            if (Number.isFinite(val)) definirIntervalo(val);
+        });
 
         document.getElementById('btnPlay').addEventListener('click', iniciarAuto);
         document.getElementById('btnPause').addEventListener('click', pausarAuto);
@@ -309,13 +312,21 @@ function renderizarControles() {
             document.getElementById('btnEncerrarSorteio').addEventListener('click', encerrarSorteioManual);
         }
     } else {
-        controles.innerHTML = `
-            <button id="btnAcao" type="button">Sortear Número</button>
-            ${repetirNumeros ? '<button id="btnEncerrarSorteio" class="btn-secundario" type="button">Encerrar sorteio</button>' : ''}
-        `;
-        document.getElementById('btnAcao').addEventListener('click', sortearNumero);
+        const btn = document.createElement('button');
+        btn.id = 'btnAcao';
+        btn.type = 'button';
+        btn.innerText = 'Sortear Número';
+        btn.addEventListener('click', sortearNumero);
+        controles.appendChild(btn);
+
         if (repetirNumeros) {
-            document.getElementById('btnEncerrarSorteio').addEventListener('click', encerrarSorteioManual);
+            const btnEncerrar = document.createElement('button');
+            btnEncerrar.id = 'btnEncerrarSorteio';
+            btnEncerrar.className = 'btn-secundario';
+            btnEncerrar.type = 'button';
+            btnEncerrar.innerText = 'Encerrar sorteio';
+            btnEncerrar.addEventListener('click', encerrarSorteioManual);
+            controles.appendChild(btnEncerrar);
         }
     }
 }
@@ -361,7 +372,7 @@ function agendarProximoCicloAutomatico() {
     autoTimeoutId = setTimeout(cicloAutomatico, ms);
     atualizarContagemRegressiva();
     clearInterval(contagemTickId);
-    contagemTickId = setInterval(atualizarContagemRegressiva, 250);
+    contagemTickId = setInterval(atualizarContagemRegressiva, 1000);
 }
 
 function atualizarContagemRegressiva() {
@@ -448,11 +459,10 @@ function finalizarSorteio() {
     clearTimeout(autoTimeoutId);
     pararContagemRegressiva();
 
-    const status = document.getElementById('statusAnimacao');
     const mensagem = repetirNumeros
         ? `Sorteio encerrado! ${sorteados.length} número(s) sorteado(s).`
         : `Fim do sorteio! Todas as ${totalBolas} pedras saíram.`;
-    status.innerHTML = `<strong class="destaque-final">${mensagem}</strong>`;
+    DOM.statusAnimacao.innerHTML = `<strong class="destaque-final">${mensagem}</strong>`;
 
     const btnEncerrar = document.getElementById('btnEncerrarSorteio');
     if (btnEncerrar) btnEncerrar.disabled = true;
@@ -460,18 +470,14 @@ function finalizarSorteio() {
     if (modoJogo === 'automatico') {
         const btnPlay = document.getElementById('btnPlay');
         const btnPause = document.getElementById('btnPause');
-        if (btnPlay) btnPlay.disabled = true;
-        if (btnPause) btnPause.disabled = true;
+        btnPlay.disabled = true;
+        btnPause.disabled = true;
     } else {
-        const btn = document.getElementById('btnAcao');
-        if (btn) {
-            // Remove o listener original de sortearNumero antes de reatribuir,
-            // senão os dois disparam juntos no próximo clique (sorteio fantasma).
-            btn.removeEventListener('click', sortearNumero);
-            btn.innerText = 'Novo Jogo';
-            btn.disabled = false;
-            btn.addEventListener('click', prepararNovaPartida);
-        }
+        const btn = DOM.btnAcao;
+        btn.removeEventListener('click', sortearNumero);
+        btn.innerText = 'Novo Jogo';
+        btn.disabled = false;
+        btn.addEventListener('click', prepararNovaPartida);
     }
 }
 
@@ -497,26 +503,17 @@ function atualizarHistorico() {
     container.scrollTop = container.scrollHeight;
 }
 
-// Mecânica de Animação de Aniversário (Confetes)
 function dispararConfetes() {
     const cores = ['#fbbf24', '#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899'];
-
-    // Loop para gerar 150 pedaços de confete na tela
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 5; i++) {
         const confete = document.createElement('div');
         confete.className = 'confete';
-
-        // Características randômicas para cada papel picado
         confete.style.left = Math.random() * 100 + 'vw';
         confete.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
-        confete.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Entre 2s e 5s para cair
-        confete.style.animationDelay = (Math.random() * 2) + 's'; // Cascata de queda de até 2s
-        confete.style.transform = `scale(${Math.random() * 1 + 0.5})`; // Tamanhos variados
-
+        confete.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+        confete.style.animationDelay = Math.random() * 0.3 + 's';
         document.body.appendChild(confete);
-
-        // Remove o elemento após a animação acabar para não acumular memória
-        setTimeout(() => { confete.remove(); }, 7000);
+        setTimeout(() => { confete.remove(); }, 5000);
     }
 }
 
