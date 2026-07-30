@@ -179,8 +179,9 @@ body {
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     padding: clamp(12px, 2vw, 20px);
     overflow-x: hidden;
     position: relative;
