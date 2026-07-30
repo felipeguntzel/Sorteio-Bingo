@@ -30,6 +30,11 @@ const initDOM = () => {
     DOM.inputQuantidadeManual = document.getElementById('inputQuantidadeManual');
     DOM.seletorSom = document.getElementById('seletorSom');
     DOM.seletorTema = document.getElementById('seletorTema');
+    DOM.resumoModo = document.getElementById('resumoModo');
+    DOM.resumoQuantidade = document.getElementById('resumoQuantidade');
+    DOM.resumoSom = document.getElementById('resumoSom');
+    DOM.resumoTema = document.getElementById('resumoTema');
+    DOM.resumoRepetir = document.getElementById('resumoRepetir');
 };
 
 const CHAVE_PREFS = 'bingoPro.preferencias';
@@ -154,24 +159,22 @@ function carregarPreferencias() {
         const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS));
         if (!salvo) { atualizarChipsRadio('grupoModo'); atualizarChipsRadio('grupoRepetir'); return; }
 
-        if (salvo.modo) {
+        if (salvo.modo && ['manual', 'automatico'].includes(salvo.modo)) {
             const radio = document.querySelector(`input[name="modo"][value="${salvo.modo}"]`);
             if (radio) radio.checked = true;
         }
 
-        const seletorQuantidade = document.getElementById('seletorQuantidade');
-        const inputManual = document.getElementById('inputQuantidadeManual');
         if (salvo.quantidadeManual && Number.isFinite(salvo.quantidade)) {
-            seletorQuantidade.value = 'manual';
-            inputManual.classList.remove('oculto');
-            inputManual.value = Math.min(200, Math.max(10, salvo.quantidade));
+            DOM.seletorQuantidade.value = 'manual';
+            DOM.inputQuantidadeManual.classList.remove('oculto');
+            DOM.inputQuantidadeManual.value = Math.min(200, Math.max(10, salvo.quantidade));
         } else if (salvo.quantidade) {
-            definirSelectSeValido(seletorQuantidade, salvo.quantidade);
+            definirSelectSeValido(DOM.seletorQuantidade, salvo.quantidade);
         }
 
-        if (salvo.som) definirSelectSeValido(document.getElementById('seletorSom'), salvo.som);
+        if (salvo.som) definirSelectSeValido(DOM.seletorSom, salvo.som);
 
-        if (salvo.tema && definirSelectSeValido(document.getElementById('seletorTema'), salvo.tema)) {
+        if (salvo.tema && definirSelectSeValido(DOM.seletorTema, salvo.tema)) {
             temaAtual = salvo.tema;
             aplicarTema(temaAtual);
         }
@@ -201,8 +204,8 @@ function atualizarChipsRadio(idGrupo) {
 function lerConfiguracoesDosCampos() {
     modoJogo = document.querySelector('input[name="modo"]:checked').value;
     totalBolas = obterQuantidadeSelecionada();
-    somAtual = document.getElementById('seletorSom').value;
-    temaAtual = document.getElementById('seletorTema').value;
+    somAtual = DOM.seletorSom.value;
+    temaAtual = DOM.seletorTema.value;
     repetirNumeros = document.querySelector('input[name="repetir"]:checked').value === 'sim';
     aplicarTema(temaAtual);
     salvarPreferencias();
@@ -238,11 +241,11 @@ function prepararNovaPartida() {
 }
 
 function atualizarResumo() {
-    document.getElementById('resumoModo').innerText = rotulosModo[modoJogo] || modoJogo;
-    document.getElementById('resumoQuantidade').innerText = totalBolas;
-    document.getElementById('resumoSom').innerText = rotulosSom[somAtual] || somAtual;
-    document.getElementById('resumoTema').innerText = rotulosTema[temaAtual] || temaAtual;
-    document.getElementById('resumoRepetir').innerText = repetirNumeros ? 'Sim' : 'Não';
+    DOM.resumoModo.innerText = rotulosModo[modoJogo] || modoJogo;
+    DOM.resumoQuantidade.innerText = totalBolas;
+    DOM.resumoSom.innerText = rotulosSom[somAtual] || somAtual;
+    DOM.resumoTema.innerText = rotulosTema[temaAtual] || temaAtual;
+    DOM.resumoRepetir.innerText = repetirNumeros ? 'Sim' : 'Não';
 }
 
 function atualizarContador() {
