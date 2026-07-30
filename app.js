@@ -15,6 +15,23 @@ let autoTimeoutId = null;
 let contagemTickId = null;
 let proximoSorteioEm = null;
 
+const DOM = {};
+const initDOM = () => {
+    DOM.numeroSorteado = document.getElementById('numeroSorteado');
+    DOM.rodadaTexto = document.getElementById('rodadaTexto');
+    DOM.contadorRestante = document.getElementById('contadorRestante');
+    DOM.numerosFaltando = document.getElementById('numerosFaltando');
+    DOM.statusAnimacao = document.getElementById('statusAnimacao');
+    DOM.historicoContainer = document.getElementById('historicoContainer');
+    DOM.areaControles = document.getElementById('areaControles');
+    DOM.btnAcao = document.getElementById('btnAcao');
+    DOM.modalConfiguracoes = document.getElementById('modalConfiguracoes');
+    DOM.seletorQuantidade = document.getElementById('seletorQuantidade');
+    DOM.inputQuantidadeManual = document.getElementById('inputQuantidadeManual');
+    DOM.seletorSom = document.getElementById('seletorSom');
+    DOM.seletorTema = document.getElementById('seletorTema');
+};
+
 const CHAVE_PREFS = 'bingoPro.preferencias';
 const PRESETS_INTERVALO = [5, 15, 30, 60];
 
@@ -211,12 +228,11 @@ function prepararNovaPartida() {
 
     tocarSomInicio();
 
-    document.getElementById('rodadaTexto').innerText = 'Globo pronto!';
-    const bola = document.getElementById('numeroSorteado');
-    bola.innerText = '--';
-    bola.classList.toggle('tres-digitos', totalBolas >= 100);
-    document.getElementById('statusAnimacao').innerText = '';
-    document.getElementById('historicoContainer').innerHTML =
+    DOM.rodadaTexto.innerText = 'Globo pronto!';
+    DOM.numeroSorteado.innerText = '--';
+    DOM.numeroSorteado.classList.toggle('tres-digitos', totalBolas >= 100);
+    DOM.statusAnimacao.innerText = '';
+    DOM.historicoContainer.innerHTML =
         '<div id="itemVazio" class="historico-vazio">Nenhuma bola sorteada neste painel ainda.</div>';
 
     atualizarContador();
@@ -233,12 +249,12 @@ function atualizarResumo() {
 }
 
 function atualizarContador() {
-    const el = document.getElementById('contadorRestante');
     if (repetirNumeros) {
-        el.innerHTML = `Sorteios: <span id="numerosFaltando">${sorteados.length}</span>`;
+        DOM.contadorRestante.innerHTML = `Sorteios: <span id="numerosFaltando">${sorteados.length}</span>`;
     } else {
-        el.innerHTML = `Restam: <span id="numerosFaltando">${numeros.length}</span> / <span id="totalBolasLabel">${totalBolas}</span>`;
+        DOM.contadorRestante.innerHTML = `Restam: <span id="numerosFaltando">${numeros.length}</span> / <span id="totalBolasLabel">${totalBolas}</span>`;
     }
+    DOM.numerosFaltando = document.getElementById('numerosFaltando');
 }
 
 function renderizarControles() {
@@ -371,15 +387,14 @@ function formatarNumero(num) {
 function sortearNumero() {
     if (!repetirNumeros && numeros.length === 0) return;
 
-    const btnManual = document.getElementById('btnAcao');
-    const status = document.getElementById('statusAnimacao');
-    const bola = document.getElementById('numeroSorteado');
+    const btnManual = DOM.btnAcao;
+    const status = DOM.statusAnimacao;
+    const bola = DOM.numeroSorteado;
 
     if (btnManual) btnManual.disabled = true;
     bola.classList.add('animando');
     status.innerText = 'Misturando o globo de pedras .';
 
-    // Bipes sutis de rotação do globo
     const p = perfisSom[somAtual];
     if (p) {
         tocarSom(p.freq * 0.29, p.tipo, 0.05, 0);
@@ -405,7 +420,7 @@ function sortearNumero() {
 
         sorteados.push(numeroSorteado);
 
-        document.getElementById('rodadaTexto').innerText = `Rodada ${formatarNumero(rodada)}`;
+        DOM.rodadaTexto.innerText = `Rodada ${formatarNumero(rodada)}`;
         bola.innerText = formatarNumero(numeroSorteado);
 
         rodada++;
@@ -524,45 +539,46 @@ document.addEventListener('keydown', evento => {
     });
 });
 
-document.querySelectorAll('input[name="modo"]').forEach(input => {
-    input.addEventListener('change', () => atualizarChipsRadio('grupoModo'));
-});
+const setupEventListeners = () => {
+    document.getElementById('grupoModo').addEventListener('change', e => {
+        if (e.target.name === 'modo') atualizarChipsRadio('grupoModo');
+    });
 
-document.querySelectorAll('input[name="repetir"]').forEach(input => {
-    input.addEventListener('change', () => atualizarChipsRadio('grupoRepetir'));
-});
+    document.getElementById('grupoRepetir').addEventListener('change', e => {
+        if (e.target.name === 'repetir') atualizarChipsRadio('grupoRepetir');
+    });
 
-document.getElementById('seletorQuantidade').addEventListener('change', function () {
-    document.getElementById('inputQuantidadeManual').classList.toggle('oculto', this.value !== 'manual');
-});
+    DOM.seletorQuantidade.addEventListener('change', function() {
+        DOM.inputQuantidadeManual.classList.toggle('oculto', this.value !== 'manual');
+    });
 
-document.getElementById('seletorTema').addEventListener('change', function () {
-    aplicarTema(this.value);
-});
+    DOM.seletorTema.addEventListener('change', function() {
+        aplicarTema(this.value);
+    });
 
-document.getElementById('btnAbrirConfiguracoes').addEventListener('click', () => abrirModal('modalConfiguracoes'));
-document.getElementById('btnAplicarConfiguracoes').addEventListener('click', aplicarConfiguracoes);
-document.getElementById('btnFecharConfiguracoes').addEventListener('click', () => fecharModal('modalConfiguracoes'));
-document.getElementById('modalConfiguracoes').addEventListener('click', e => fecharModalClique(e, 'modalConfiguracoes'));
+    document.getElementById('btnAbrirConfiguracoes').addEventListener('click', () => abrirModal('modalConfiguracoes'));
+    document.getElementById('btnAplicarConfiguracoes').addEventListener('click', aplicarConfiguracoes);
+    document.getElementById('btnFecharConfiguracoes').addEventListener('click', () => fecharModal('modalConfiguracoes'));
+    DOM.modalConfiguracoes.addEventListener('click', e => fecharModalClique(e, 'modalConfiguracoes'));
 
-document.getElementById('btnAbrirSobre').addEventListener('click', () => abrirModal('modalSobre'));
-document.getElementById('btnFecharSobre').addEventListener('click', () => fecharModal('modalSobre'));
-document.getElementById('modalSobre').addEventListener('click', e => fecharModalClique(e, 'modalSobre'));
+    document.getElementById('btnAbrirSobre').addEventListener('click', () => abrirModal('modalSobre'));
+    document.getElementById('btnFecharSobre').addEventListener('click', () => fecharModal('modalSobre'));
+    document.getElementById('modalSobre').addEventListener('click', e => fecharModalClique(e, 'modalSobre'));
 
-document.getElementById('btnAbrirPrivacidade').addEventListener('click', () => abrirModal('modalPrivacidade'));
-document.getElementById('btnFecharPrivacidade').addEventListener('click', () => fecharModal('modalPrivacidade'));
-document.getElementById('modalPrivacidade').addEventListener('click', e => fecharModalClique(e, 'modalPrivacidade'));
+    document.getElementById('btnAbrirPrivacidade').addEventListener('click', () => abrirModal('modalPrivacidade'));
+    document.getElementById('btnFecharPrivacidade').addEventListener('click', () => fecharModal('modalPrivacidade'));
+    document.getElementById('modalPrivacidade').addEventListener('click', e => fecharModalClique(e, 'modalPrivacidade'));
+};
 
+initDOM();
+setupEventListeners();
 carregarPreferencias();
 lerConfiguracoesDosCampos();
 prepararNovaPartida();
 
-// Registra o service worker para o app funcionar offline após a primeira visita.
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {
-            // Ambiente sem suporte (ex.: aberto via file://) - segue sem cache offline
-        });
+        navigator.serviceWorker.register('sw.js').catch(() => {});
     });
 }
 

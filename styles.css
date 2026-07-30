@@ -8,6 +8,24 @@
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --divider: #334155;
+    --pad-xs: clamp(4px, 1vw, 6px);
+    --pad-sm: clamp(8px, 1.5vw, 10px);
+    --pad-md: clamp(12px, 2vw, 16px);
+    --pad-lg: clamp(16px, 3vw, 24px);
+    --pad-xl: clamp(20px, 3vw, 30px);
+    --gap-sm: clamp(6px, 1vw, 8px);
+    --gap-md: clamp(10px, 2vw, 12px);
+    --gap-lg: clamp(15px, 3vw, 30px);
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 16px;
+    --font-xs: clamp(10px, 1.8vw, 12px);
+    --font-sm: clamp(11px, 1.8vw, 13px);
+    --font-base: clamp(12px, 2vw, 14px);
+    --font-md: clamp(13px, 2vw, 15px);
+    --font-lg: clamp(14px, 2.5vw, 18px);
+    --font-xl: clamp(16px, 3vw, 20px);
 }
 
 * {
@@ -35,7 +53,7 @@ body.pagina-guia {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: clamp(16px, 3vw, 24px) clamp(16px, 4vw, 20px);
+    padding: var(--pad-lg) clamp(16px, 4vw, 20px);
     border-bottom: 2px dashed var(--divider);
     flex-wrap: wrap;
 }
@@ -58,7 +76,7 @@ body.pagina-guia {
 .pagina-conteudo {
     max-width: 780px;
     margin: 0 auto;
-    padding: clamp(30px, 5vw, 50px) clamp(16px, 3vw, 24px) clamp(80px, 10vw, 100px);
+    padding: clamp(30px, 5vw, 50px) var(--pad-lg) clamp(80px, 10vw, 100px);
 }
 
 .pagina-conteudo h2 {
@@ -400,7 +418,6 @@ h1 span {
     justify-content: center;
     border-right: 2px dashed var(--divider);
     padding-right: clamp(8px, 2vw, 15px);
-    overflow-y: auto;
     min-height: 0;
 }
 
@@ -425,7 +442,7 @@ h1 span {
 .bola-bingo {
     width: clamp(120px, 20vw, 180px);
     height: clamp(120px, 20vw, 180px);
-    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f8fafc 25%, #cbd5e1 75%, #94a3b8 100%);
+    background: radial-gradient(circle at 35% 35%, #fff 0%, #f8fafc 25%, #cbd5e1 75%, #94a3b8 100%);
     border: clamp(4px, 1vw, 6px) solid var(--accent);
     border-radius: 50%;
     display: flex;
@@ -434,10 +451,10 @@ h1 span {
     font-size: clamp(42px, 12vw, 76px);
     font-weight: 900;
     color: var(--ball-text);
-    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
-    margin-bottom: clamp(15px, 2vw, 20px);
-    transition: transform 0.15s ease;
+    box-shadow: 0 20px 30px -10px rgba(0,0,0,0.7), inset -10px -10px 25px rgba(0,0,0,0.15);
+    margin-bottom: var(--gap-lg);
     flex-shrink: 0;
+    will-change: transform;
 }
 
 .bola-bingo.tres-digitos {
