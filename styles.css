@@ -748,17 +748,29 @@ button:disabled {
     font-size: clamp(12px, 2vw, 14px);
 }
 
-.modal-privacidade {
+.modal-box p a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.modal-box p a:hover {
+    color: var(--primary);
+}
+
+.modal-privacidade,
+.modal-sobre {
     text-align: center;
 }
 
-.modal-privacidade h2 {
+.modal-privacidade h2,
+.modal-sobre h2 {
     margin-bottom: clamp(16px, 3vw, 20px);
     font-size: clamp(18px, 4vw, 22px);
 }
 
 .intro-privacidade {
-    color: var(--text-light);
+    color: var(--text-main);
     margin-bottom: clamp(14px, 2.5vw, 18px) !important;
     font-size: clamp(13px, 2.2vw, 15px);
 }
@@ -770,19 +782,19 @@ button:disabled {
 }
 
 .lista-privacidade li {
-    color: var(--text-light);
+    color: var(--text-main);
     font-size: clamp(13px, 2.2vw, 15px);
     margin-bottom: clamp(8px, 1.5vw, 10px);
     font-weight: 500;
 }
 
-.btn-privacidade {
+.btn-modal-acao {
     display: block;
     width: 100%;
     margin-top: clamp(18px, 3vw, 24px) !important;
     padding: clamp(12px, 2vw, 14px) clamp(24px, 4vw, 32px) !important;
     background: var(--accent);
-    color: var(--text-light);
+    color: var(--text-main);
     border: none;
     border-radius: 12px;
     font-size: clamp(13px, 2.2vw, 15px);
@@ -791,13 +803,13 @@ button:disabled {
     transition: all 0.3s ease;
 }
 
-.btn-privacidade:hover {
-    background: var(--accent-hover);
+.btn-modal-acao:hover {
+    background: var(--primary);
     transform: translateY(-2px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.btn-privacidade:active {
+.btn-modal-acao:active {
     transform: translateY(0);
 }
 
