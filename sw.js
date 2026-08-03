@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bingo-pro-v5';
+const CACHE_NAME = 'bingo-pro-v6';
 const ARQUIVOS_APP_SHELL = [
     './',
     './index.html',
