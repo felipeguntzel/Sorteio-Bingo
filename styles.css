@@ -232,13 +232,19 @@ h1 span {
 .ad-slot {
     width: 100%;
     min-height: 50px;
-    max-height: 90px;
+    max-height: 90px !important;
     margin: 8px 0;
     border: 1px dashed rgba(51, 65, 85, 0.5);
     border-radius: 8px;
     background: rgba(15, 23, 42, 0.2);
     flex-shrink: 0;
     opacity: 0.7;
+    overflow: hidden !important;
+}
+
+.ad-slot .adsbygoogle {
+    max-height: 90px !important;
+    overflow: hidden !important;
 }
 
 .ad-slot-lateral {
