@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bingo-pro-v10';
+const CACHE_NAME = 'bingo-pro-v11';
 const ARQUIVOS_APP_SHELL = [
     './',
     './index.html',
@@ -40,11 +40,11 @@ self.addEventListener('fetch', event => {
                 .then(respostaRede => {
                     if (respostaRede.ok) {
                         const copia = respostaRede.clone();
-                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copia));
+                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copia)).catch(() => {});
                     }
                     return respostaRede;
                 })
-                .catch(() => respostaCache);
+                .catch(() => respostaCache || Response.error());
 
             return respostaCache || buscaRede;
         })
