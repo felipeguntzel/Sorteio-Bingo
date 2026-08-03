@@ -748,6 +748,59 @@ button:disabled {
     font-size: clamp(12px, 2vw, 14px);
 }
 
+.modal-privacidade {
+    text-align: center;
+}
+
+.modal-privacidade h2 {
+    margin-bottom: clamp(16px, 3vw, 20px);
+    font-size: clamp(18px, 4vw, 22px);
+}
+
+.intro-privacidade {
+    color: var(--text-light);
+    margin-bottom: clamp(14px, 2.5vw, 18px) !important;
+    font-size: clamp(13px, 2.2vw, 15px);
+}
+
+.lista-privacidade {
+    text-align: left;
+    margin: 0 auto clamp(14px, 2.5vw, 18px) auto !important;
+    max-width: 380px;
+}
+
+.lista-privacidade li {
+    color: var(--text-light);
+    font-size: clamp(13px, 2.2vw, 15px);
+    margin-bottom: clamp(8px, 1.5vw, 10px);
+    font-weight: 500;
+}
+
+.btn-privacidade {
+    display: block;
+    width: 100%;
+    margin-top: clamp(18px, 3vw, 24px) !important;
+    padding: clamp(12px, 2vw, 14px) clamp(24px, 4vw, 32px) !important;
+    background: var(--accent);
+    color: var(--text-light);
+    border: none;
+    border-radius: 12px;
+    font-size: clamp(13px, 2.2vw, 15px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-privacidade:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.btn-privacidade:active {
+    transform: translateY(0);
+}
+
 .confete {
     position: absolute;
     width: 12px;
