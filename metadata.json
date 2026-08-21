@@ -1,0 +1,6 @@
+{
+  "name": "Bingo Pro",
+  "description": "Sorteador eletrônico de bingo gratuito, com modo manual ou automático, temas de cor e histórico das rodadas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

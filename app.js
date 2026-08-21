@@ -1,3 +1,8 @@
+/**
+ * BINGO PRO - SORTEADOR ELETRÔNICO PROFISSIONAL
+ * Guntzel Tech · 2026
+ */
+
 let rodada = 1;
 let numeros = [];
 let sorteados = [];
@@ -9,6 +14,8 @@ let somAtual = 'classico';
 let temaAtual = 'ambar';
 let repetirNumeros = false;
 let intervaloAutomaticoSegundos = 15;
+let vozAtiva = true;
+let tabelaMestreVisivel = true;
 
 let autoRodando = false;
 let autoTimeoutId = null;
@@ -35,6 +42,11 @@ const initDOM = () => {
     DOM.resumoSom = document.getElementById('resumoSom');
     DOM.resumoTema = document.getElementById('resumoTema');
     DOM.resumoRepetir = document.getElementById('resumoRepetir');
+    DOM.gradeTabelaMestre = document.getElementById('gradeTabelaMestre');
+    DOM.secaoTabelaMestre = document.getElementById('secaoTabelaMestre');
+    DOM.statusVozTexto = document.getElementById('statusVozTexto');
+    DOM.btnAlternarVoz = document.getElementById('btnAlternarVoz');
+    DOM.btnAlternarTabelaMestre = document.getElementById('btnAlternarTabelaMestre');
 };
 
 const CHAVE_PREFS = 'bingoPro.preferencias';
@@ -67,18 +79,17 @@ function aplicarTema(nome) {
     document.documentElement.style.setProperty('--accent', t.accent);
 }
 
-// Gerador de som nativo do navegador (Web Audio API)
+// Síntese de Áudio (Web Audio API)
 function tocarSom(frequencia, tipo, duracao, delay = 0) {
     if (somAtual === 'mudo') return;
 
     setTimeout(() => {
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
             let oscilador = audioCtx.createOscillator();
             let ganho = audioCtx.createGain();
 
-            oscilador.type = tipo; // 'sine', 'square', 'sawtooth', 'triangle'
+            oscilador.type = tipo;
             oscilador.frequency.setValueAtTime(frequencia, audioCtx.currentTime);
 
             ganho.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -90,7 +101,7 @@ function tocarSom(frequencia, tipo, duracao, delay = 0) {
             oscilador.start();
             oscilador.stop(audioCtx.currentTime + duracao);
         } catch (e) {
-            // Áudio bloqueado em alguns navegadores/modos - ignora silenciosamente
+            // Ignora se áudio bloqueado pelo navegador
         }
     }, delay);
 }
@@ -112,11 +123,41 @@ function tocarSomRodada() {
 function tocarSomFinal() {
     const p = perfisSom[somAtual];
     if (!p) return;
-    // Fanfarra triunfal (tríade maior + oitava) na afinação do som escolhido
     tocarSom(p.freq, p.tipo, 0.2, 0);
     tocarSom(p.freq * 1.26, p.tipo, 0.2, 150);
     tocarSom(p.freq * 1.5, p.tipo, 0.2, 300);
     tocarSom(p.freq * 2, p.tipo, 0.5, 450);
+}
+
+// Locução com Voz em Português (Web Speech API)
+function falarNumero(num) {
+    if (!vozAtiva || !('speechSynthesis' in window)) return;
+
+    window.speechSynthesis.cancel(); // Interrompe fala anterior
+
+    let textoFala = '';
+    if (totalBolas === 75) {
+        let letra = 'B';
+        if (num > 15 && num <= 30) letra = 'I';
+        else if (num > 30 && num <= 45) letra = 'N';
+        else if (num > 45 && num <= 60) letra = 'G';
+        else if (num > 60) letra = 'O';
+        textoFala = `Letra ${letra}, número ${num}`;
+    } else {
+        textoFala = `Pedra número ${num}`;
+    }
+
+    const locucao = new SpeechSynthesisUtterance(textoFala);
+    locucao.lang = 'pt-BR';
+    locucao.rate = 1.0;
+    locucao.pitch = 1.0;
+    
+    // Tenta selecionar voz pt-BR se disponível
+    const vozes = window.speechSynthesis.getVoices();
+    const vozPt = vozes.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt_BR') || v.lang.startsWith('pt'));
+    if (vozPt) locucao.voice = vozPt;
+
+    window.speechSynthesis.speak(locucao);
 }
 
 function obterQuantidadeSelecionada() {
@@ -139,15 +180,13 @@ function salvarPreferencias() {
             som: somAtual,
             tema: temaAtual,
             repetir: repetirNumeros,
-            intervalo: intervaloAutomaticoSegundos
+            intervalo: intervaloAutomaticoSegundos,
+            voz: vozAtiva,
+            tabelaMestre: tabelaMestreVisivel
         }));
-    } catch (e) {
-        // localStorage indisponível - ignora silenciosamente
-    }
+    } catch (e) {}
 }
 
-// Só aceita o valor salvo se ele bater com uma <option> existente,
-// evitando que o select fique em branco com dados corrompidos ou desatualizados.
 function definirSelectSeValido(select, valor) {
     const existe = Array.from(select.options).some(opt => opt.value === String(valor));
     if (existe) select.value = valor;
@@ -157,7 +196,11 @@ function definirSelectSeValido(select, valor) {
 function carregarPreferencias() {
     try {
         const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS));
-        if (!salvo) { atualizarChipsRadio('grupoModo'); atualizarChipsRadio('grupoRepetir'); return; }
+        if (!salvo) {
+            atualizarChipsRadio('grupoModo');
+            atualizarChipsRadio('grupoRepetir');
+            return;
+        }
 
         if (salvo.modo && ['manual', 'automatico'].includes(salvo.modo)) {
             const radio = document.querySelector(`input[name="modo"][value="${salvo.modo}"]`);
@@ -187,9 +230,19 @@ function carregarPreferencias() {
         if (Number.isFinite(salvo.intervalo)) {
             intervaloAutomaticoSegundos = Math.min(120, Math.max(1, salvo.intervalo));
         }
-    } catch (e) {
-        // preferências corrompidas - ignora e usa os padrões
-    }
+
+        if (typeof salvo.voz === 'boolean') {
+            vozAtiva = salvo.voz;
+            DOM.statusVozTexto.innerText = vozAtiva ? 'Ligada' : 'Desligada';
+            DOM.btnAlternarVoz.classList.toggle('ativo', vozAtiva);
+        }
+
+        if (typeof salvo.tabelaMestre === 'boolean') {
+            tabelaMestreVisivel = salvo.tabelaMestre;
+            DOM.secaoTabelaMestre.classList.toggle('oculto', !tabelaMestreVisivel);
+            DOM.btnAlternarTabelaMestre.classList.toggle('ativo', tabelaMestreVisivel);
+        }
+    } catch (e) {}
     atualizarChipsRadio('grupoModo');
     atualizarChipsRadio('grupoRepetir');
 }
@@ -217,6 +270,83 @@ function aplicarConfiguracoes() {
     fecharModal('modalConfiguracoes');
 }
 
+// Renderizador da Tabela Mestre de Conferência
+function renderizarTabelaMestre() {
+    if (!DOM.gradeTabelaMestre) return;
+    DOM.gradeTabelaMestre.innerHTML = '';
+
+    if (totalBolas === 75) {
+        const colunas = [
+            { letra: 'B', min: 1, max: 15 },
+            { letra: 'I', min: 16, max: 30 },
+            { letra: 'N', min: 31, max: 45 },
+            { letra: 'G', min: 46, max: 60 },
+            { letra: 'O', min: 61, max: 75 }
+        ];
+
+        colunas.forEach(col => {
+            const linha = document.createElement('div');
+            linha.className = 'mestre-linha';
+
+            const header = document.createElement('div');
+            header.className = 'mestre-letra-header';
+            header.innerText = col.letra;
+            linha.appendChild(header);
+
+            const numLinha = document.createElement('div');
+            numLinha.className = 'mestre-numeros-linha';
+
+            for (let n = col.min; n <= col.max; n++) {
+                const pedra = document.createElement('div');
+                pedra.className = 'mestre-pedra';
+                pedra.id = `mestre-pedra-${n}`;
+                pedra.innerText = String(n).padStart(2, '0');
+                if (sorteados.includes(n)) pedra.classList.add('sorteada');
+                numLinha.appendChild(pedra);
+            }
+
+            linha.appendChild(numLinha);
+            DOM.gradeTabelaMestre.appendChild(linha);
+        });
+    } else {
+        // Tabela genérica por dezenas (ex: 1-10, 11-20, ...)
+        const dezenas = Math.ceil(totalBolas / 10);
+        for (let d = 0; d < dezenas; d++) {
+            const min = d * 10 + 1;
+            const max = Math.min((d + 1) * 10, totalBolas);
+
+            const linha = document.createElement('div');
+            linha.className = 'mestre-linha';
+
+            const header = document.createElement('div');
+            header.className = 'mestre-letra-header';
+            header.innerText = `${min}`;
+            header.style.fontSize = '11px';
+            linha.appendChild(header);
+
+            const numLinha = document.createElement('div');
+            numLinha.className = 'mestre-numeros-linha';
+
+            for (let n = min; n <= max; n++) {
+                const pedra = document.createElement('div');
+                pedra.className = 'mestre-pedra';
+                pedra.id = `mestre-pedra-${n}`;
+                pedra.innerText = String(n).padStart(2, '0');
+                if (sorteados.includes(n)) pedra.classList.add('sorteada');
+                numLinha.appendChild(pedra);
+            }
+
+            linha.appendChild(numLinha);
+            DOM.gradeTabelaMestre.appendChild(linha);
+        }
+    }
+}
+
+function marcarPedraNaTabelaMestre(num) {
+    const el = document.getElementById(`mestre-pedra-${num}`);
+    if (el) el.classList.add('sorteada');
+}
+
 function prepararNovaPartida() {
     rodada = 1;
     sorteados = [];
@@ -238,6 +368,7 @@ function prepararNovaPartida() {
     atualizarContador();
     atualizarResumo();
     renderizarControles();
+    renderizarTabelaMestre();
 }
 
 function atualizarResumo() {
@@ -434,8 +565,20 @@ function sortearNumero() {
 
         sorteados.push(numeroSorteado);
 
-        DOM.rodadaTexto.innerText = `Rodada ${formatarNumero(rodada)}`;
+        let letraPrefixo = '';
+        if (totalBolas === 75) {
+            if (numeroSorteado <= 15) letraPrefixo = 'B - ';
+            else if (numeroSorteado <= 30) letraPrefixo = 'I - ';
+            else if (numeroSorteado <= 45) letraPrefixo = 'N - ';
+            else if (numeroSorteado <= 60) letraPrefixo = 'G - ';
+            else letraPrefixo = 'O - ';
+        }
+
+        DOM.rodadaTexto.innerText = `Rodada ${formatarNumero(rodada)} (${letraPrefixo}${numeroSorteado})`;
         bola.innerText = formatarNumero(numeroSorteado);
+
+        marcarPedraNaTabelaMestre(numeroSorteado);
+        falarNumero(numeroSorteado);
 
         rodada++;
         atualizarContador();
@@ -473,14 +616,16 @@ function finalizarSorteio() {
     if (modoJogo === 'automatico') {
         const btnPlay = document.getElementById('btnPlay');
         const btnPause = document.getElementById('btnPause');
-        btnPlay.disabled = true;
-        btnPause.disabled = true;
+        if (btnPlay) btnPlay.disabled = true;
+        if (btnPause) btnPause.disabled = true;
     } else {
         const btn = DOM.btnAcao;
-        btn.removeEventListener('click', sortearNumero);
-        btn.innerText = 'Novo Jogo';
-        btn.disabled = false;
-        btn.addEventListener('click', prepararNovaPartida);
+        if (btn) {
+            btn.removeEventListener('click', sortearNumero);
+            btn.innerText = 'Novo Jogo';
+            btn.disabled = false;
+            btn.addEventListener('click', prepararNovaPartida);
+        }
     }
 }
 
@@ -499,7 +644,7 @@ function atualizarHistorico() {
     const num = sorteados[ultimoIndex];
 
     const item = document.createElement('div');
-    item.className = 'item-historico';
+    item.className = 'item-historico recente';
     item.innerHTML = `${formatarNumero(ultimoIndex + 1)}º nº:<strong>${formatarNumero(num)}</strong>`;
 
     container.appendChild(item);
@@ -508,7 +653,7 @@ function atualizarHistorico() {
 
 function dispararConfetes() {
     const cores = ['#fbbf24', '#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899'];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 30; i++) {
         const confete = document.createElement('div');
         confete.className = 'confete';
         confete.style.left = Math.random() * 100 + 'vw';
@@ -521,11 +666,13 @@ function dispararConfetes() {
 }
 
 function abrirModal(id) {
-    document.getElementById(id).classList.add('aberto');
+    const el = document.getElementById(id);
+    if (el) el.classList.add('aberto');
 }
 
 function fecharModal(id) {
-    document.getElementById(id).classList.remove('aberto');
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('aberto');
 }
 
 function fecharModalClique(evento, id) {
@@ -534,10 +681,103 @@ function fecharModalClique(evento, id) {
 
 document.addEventListener('keydown', evento => {
     if (evento.key !== 'Escape') return;
-    ['modalConfiguracoes', 'modalSobre', 'modalPrivacidade'].forEach(id => {
-        if (document.getElementById(id).classList.contains('aberto')) fecharModal(id);
+    ['modalConfiguracoes', 'modalCompartilhar', 'modalSobre', 'modalPrivacidade'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.classList.contains('aberto')) fecharModal(id);
     });
 });
+
+// Ações da Barra de Ferramentas
+function configurarBarraFerramentas() {
+    // Alternar Locutor de Voz
+    DOM.btnAlternarVoz.addEventListener('click', () => {
+        vozAtiva = !vozAtiva;
+        DOM.statusVozTexto.innerText = vozAtiva ? 'Ligada' : 'Desligada';
+        DOM.btnAlternarVoz.classList.toggle('ativo', vozAtiva);
+        salvarPreferencias();
+    });
+
+    // Alternar Tabela Mestre
+    DOM.btnAlternarTabelaMestre.addEventListener('click', () => {
+        tabelaMestreVisivel = !tabelaMestreVisivel;
+        DOM.secaoTabelaMestre.classList.toggle('oculto', !tabelaMestreVisivel);
+        DOM.btnAlternarTabelaMestre.classList.toggle('ativo', tabelaMestreVisivel);
+        salvarPreferencias();
+    });
+
+    // Modo Tela Cheia (TV / Projetor)
+    const btnTelaCheia = document.getElementById('btnTelaCheia');
+    btnTelaCheia.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {
+                document.body.classList.toggle('modo-tela-cheia');
+            });
+            btnTelaCheia.classList.add('ativo');
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+            document.body.classList.remove('modo-tela-cheia');
+            btnTelaCheia.classList.remove('ativo');
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        const emTelaCheia = !!document.fullscreenElement;
+        document.body.classList.toggle('modo-tela-cheia', emTelaCheia);
+        btnTelaCheia.classList.toggle('ativo', emTelaCheia);
+    });
+
+    // Copiar Histórico
+    const btnCopiar = document.getElementById('btnCopiarHistorico');
+    if (btnCopiar) {
+        btnCopiar.addEventListener('click', () => {
+            if (sorteados.length === 0) {
+                alert('Nenhum número sorteado ainda para copiar.');
+                return;
+            }
+            const texto = `BINGO PRO - Números Sorteados (${sorteados.length}):\n${sorteados.join(', ')}`;
+            navigator.clipboard.writeText(texto).then(() => {
+                btnCopiar.innerText = '✓ Copiado!';
+                setTimeout(() => { btnCopiar.innerText = '📋 Copiar'; }, 2000);
+            });
+        });
+    }
+
+    // Modal Compartilhar
+    const btnCompartilhar = document.getElementById('btnCompartilhar');
+    btnCompartilhar.addEventListener('click', () => {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Bingo Pro - Sorteador Eletrônico',
+                text: 'Acompanhe a rodada do bingo ou gere suas cartelas grátis no Bingo Pro!',
+                url: window.location.href
+            }).catch(() => abrirModal('modalCompartilhar'));
+        } else {
+            abrirModal('modalCompartilhar');
+        }
+    });
+
+    const shareUrl = encodeURIComponent(window.location.origin || 'https://sorteio-bingo.pages.dev/');
+    const shareText = encodeURIComponent('Vem jogar Bingo com a gente no Bingo Pro! Sorteador com voz e gerador de cartelas grátis: ');
+
+    const linkZap = document.getElementById('btnShareWhatsapp');
+    if (linkZap) linkZap.href = `https://api.whatsapp.com/send?text=${shareText}${shareUrl}`;
+
+    const linkTg = document.getElementById('btnShareTelegram');
+    if (linkTg) linkTg.href = `https://t.me/share/url?url=${shareUrl}&text=${shareText}`;
+
+    const btnCopiarLink = document.getElementById('btnCopiarLinkApp');
+    if (btnCopiarLink) {
+        btnCopiarLink.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                btnCopiarLink.innerText = '✓ Link Copiado!';
+                setTimeout(() => { btnCopiarLink.innerText = '📋 Copiar Link do Site'; }, 2000);
+            });
+        });
+    }
+
+    const btnFecharComp = document.getElementById('btnFecharCompartilhar');
+    if (btnFecharComp) btnFecharComp.addEventListener('click', () => fecharModal('modalCompartilhar'));
+}
 
 const setupEventListeners = () => {
     document.getElementById('grupoModo').addEventListener('change', e => {
@@ -561,13 +801,16 @@ const setupEventListeners = () => {
     document.getElementById('btnFecharConfiguracoes').addEventListener('click', () => fecharModal('modalConfiguracoes'));
     DOM.modalConfiguracoes.addEventListener('click', e => fecharModalClique(e, 'modalConfiguracoes'));
 
-    document.getElementById('btnAbrirSobre').addEventListener('click', () => abrirModal('modalSobre'));
-    document.getElementById('btnFecharSobre').addEventListener('click', () => fecharModal('modalSobre'));
-    document.getElementById('modalSobre').addEventListener('click', e => fecharModalClique(e, 'modalSobre'));
+    const modalComp = document.getElementById('modalCompartilhar');
+    if (modalComp) modalComp.addEventListener('click', e => fecharModalClique(e, 'modalCompartilhar'));
 
-    document.getElementById('btnAbrirPrivacidade').addEventListener('click', () => abrirModal('modalPrivacidade'));
-    document.getElementById('btnFecharPrivacidade').addEventListener('click', () => fecharModal('modalPrivacidade'));
-    document.getElementById('modalPrivacidade').addEventListener('click', e => fecharModalClique(e, 'modalPrivacidade'));
+    const btnFecharSob = document.getElementById('btnFecharSobre');
+    if (btnFecharSob) btnFecharSob.addEventListener('click', () => fecharModal('modalSobre'));
+
+    const btnFecharPriv = document.getElementById('btnFecharPrivacidade');
+    if (btnFecharPriv) btnFecharPriv.addEventListener('click', () => fecharModal('modalPrivacidade'));
+
+    configurarBarraFerramentas();
 };
 
 initDOM();
@@ -576,33 +819,59 @@ carregarPreferencias();
 lerConfiguracoesDosCampos();
 prepararNovaPartida();
 
+// Service Worker Registration for PWA Offline Functionality
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(() => {});
     });
 }
 
-// Botão "Instalar App": só aparece quando o navegador sinaliza que o PWA é instalável
-// (hoje isso é suportado por navegadores baseados em Chromium; Firefox/Safari não disparam esse evento).
+// Suporte PWA - Instalação
 let eventoInstalacaoAdiado = null;
-
 window.addEventListener('beforeinstallprompt', evento => {
     evento.preventDefault();
     eventoInstalacaoAdiado = evento;
-    document.getElementById('btnInstalarApp').classList.remove('oculto');
-    document.getElementById('separadorInstalar').classList.remove('oculto');
+    const btnInstalar = document.getElementById('btnInstalarApp');
+    if (btnInstalar) btnInstalar.classList.remove('oculto');
 });
 
-document.getElementById('btnInstalarApp').addEventListener('click', async () => {
-    if (!eventoInstalacaoAdiado) return;
-    eventoInstalacaoAdiado.prompt();
-    await eventoInstalacaoAdiado.userChoice;
-    eventoInstalacaoAdiado = null;
-    document.getElementById('btnInstalarApp').classList.add('oculto');
-    document.getElementById('separadorInstalar').classList.add('oculto');
-});
+const btnInstalar = document.getElementById('btnInstalarApp');
+if (btnInstalar) {
+    btnInstalar.addEventListener('click', async () => {
+        if (!eventoInstalacaoAdiado) return;
+        eventoInstalacaoAdiado.prompt();
+        await eventoInstalacaoAdiado.userChoice;
+        eventoInstalacaoAdiado = null;
+        btnInstalar.classList.add('oculto');
+    });
+}
 
 window.addEventListener('appinstalled', () => {
-    document.getElementById('btnInstalarApp').classList.add('oculto');
-    document.getElementById('separadorInstalar').classList.add('oculto');
+    if (btnInstalar) btnInstalar.classList.add('oculto');
 });
+
+// Inicialização segura de anúncios do Google AdSense
+function inicializarAnuncios() {
+    const slots = document.querySelectorAll('ins.adsbygoogle');
+    slots.forEach(slot => {
+        if (slot.dataset.adLoaded === 'true') return;
+        const style = window.getComputedStyle(slot);
+        const parentStyle = slot.parentElement ? window.getComputedStyle(slot.parentElement) : null;
+        if (style.display !== 'none' && (!parentStyle || parentStyle.display !== 'none') && slot.offsetWidth > 0) {
+            try {
+                slot.dataset.adLoaded = 'true';
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                console.warn('AdSense push skipped:', e);
+            }
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarAnuncios);
+} else {
+    inicializarAnuncios();
+}
+window.addEventListener('load', inicializarAnuncios);
+window.addEventListener('resize', inicializarAnuncios);

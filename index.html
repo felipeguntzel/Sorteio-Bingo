@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo Pro - Sorteio Eletrônico</title>
-    <meta name="description" content="Bingo Pro: sorteador eletrônico de bingo grátis, direto no navegador. Modo manual ou automático, de 10 a 200 bolas, temas de cor, sons e histórico das rodadas.">
+    <title>Bingo Pro - Sorteador de Bingo Online Grátis com Voz e Tabela Mestre</title>
+    <meta name="description" content="Sorteador eletrônico de bingo online e gratuito. Modo manual ou automático com voz em português, tabela mestre de conferência, 75 e 90 bolas e gerador de cartelas para imprimir.">
     <meta name="theme-color" content="#0f172a">
     <link rel="canonical" href="https://sorteio-bingo.pages.dev/">
     <link rel="manifest" href="manifest.json">
@@ -12,124 +12,303 @@
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Bingo Pro">
-    <meta property="og:title" content="Bingo Pro - Sorteio Eletrônico de Bingo Grátis">
-    <meta property="og:description" content="Sorteador eletrônico de bingo grátis, direto no navegador. Modo manual ou automático, de 10 a 200 bolas, temas de cor, sons e funciona offline. Sem cadastro.">
+    <meta property="og:title" content="Bingo Pro - Sorteador Eletrônico de Bingo Online Gratuito">
+    <meta property="og:description" content="Sorteador de bingo online com locução de voz em português, modos 75 e 90 bolas, tabela mestre e gerador de cartelas para imprimir.">
     <meta property="og:image" content="https://sorteio-bingo.pages.dev/og-image.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://sorteio-bingo.pages.dev/">
     <meta property="og:locale" content="pt_BR">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bingo Pro - Sorteio Eletrônico de Bingo Grátis">
-    <meta name="twitter:description" content="Sorteador eletrônico de bingo grátis, direto no navegador. Modo manual ou automático, de 10 a 200 bolas, e funciona offline.">
+    <meta name="twitter:title" content="Bingo Pro - Sorteador de Bingo Online Grátis">
+    <meta name="twitter:description" content="Sorteador de bingo completo com voz em português, histórico ao vivo e tabela de conferência.">
     <meta name="twitter:image" content="https://sorteio-bingo.pages.dev/og-image.png">
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%231e293b%22 stroke=%22%23fbbf24%22 stroke-width=%226%22/><circle cx=%2245%22 cy=%2245%22 r=%2222%22 fill=%22%23ffffff%22/><text x=%2250%22 y=%2268%22 font-family=%22sans-serif%22 font-size=%2252%22 font-weight=%22900%22 fill=%22%23dc2626%22 text-anchor=%22middle%22>75</text></svg>">
 
     <link rel="stylesheet" href="styles.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4761972367670674" crossorigin="anonymous"></script>
+
+    <!-- Schema.org JSON-LD Structured Data for Google Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Bingo Pro - Sorteador de Bingo Online",
+          "url": "https://sorteio-bingo.pages.dev/",
+          "description": "Sorteador eletrônico de bingo gratuito com voz em português, modos manual e automático, tabela mestre de conferência e gerador de cartelas para impressão.",
+          "applicationCategory": "GameApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "BRL"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "O sorteador do Bingo Pro é realmente aleatório e justo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sim. O algoritmo utiliza geradores pseudoaleatórios com entropia do navegador, garantindo que cada número tenha exatamente a mesma probabilidade de sair, sem repetições até o término do globo."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Como funciona o locutor com voz em português?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "O Bingo Pro utiliza a API de síntese de voz (Web Speech API) integrada aos navegadores para anunciar automaticamente a letra e o número sorteado (ex: 'Letra B, número 12!'), facilitando a audição de todos os presentes no evento."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Posso projetar o Bingo Pro em uma TV ou telão?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sim! Você pode clicar no botão 'Tela Cheia' e espelhar o navegador em Smart TVs, projetores ou monitores externos via HDMI, Chromecast ou AirPlay."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "O aplicativo funciona sem internet (offline)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sim. O Bingo Pro é um Progressive Web App (PWA). Após acessá-lo pela primeira vez, os arquivos são guardados em cache e você pode abrir o sorteador e jogar mesmo em locais sem sinal de internet."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Onde consigo cartelas para os jogadores marcarem?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Você pode usar nossa ferramenta gratuita 'Gerador de Cartelas' disponível no menu do site para personalizar e imprimir cartelas de 75 ou 90 bolas em PDF ou na impressora."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 
-<div class="ad-slot ad-slot-lateral ad-slot-esquerda" id="adSlotEsquerda">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-4761972367670674"
-         data-ad-slot="5262769228"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-</div>
-<div class="ad-slot ad-slot-lateral ad-slot-direita" id="adSlotDireita">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-4761972367670674"
-         data-ad-slot="7729296252"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-</div>
-
-<div class="app-window">
-    <header>
+<header class="cabecalho-site">
+    <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
         <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="45" fill="#1e293b" stroke="#f59e0b" stroke-width="5"/>
             <circle cx="44" cy="44" r="20" fill="#ffffff"/>
             <text x="50" y="68" font-family="sans-serif" font-size="48" font-weight="900" fill="#dc2626" text-anchor="middle">75</text>
         </svg>
         <h1>BINGO <span>PRO</span></h1>
-    </header>
+    </a>
+</header>
 
-    <div class="ad-slot" id="adSlot">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-4761972367670674"
-             data-ad-slot="9353937331"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+<nav class="barra-navegacao-topo">
+    <div class="nav-links-container">
+        <a href="index.html" class="nav-item ativo">🎲 Sorteador</a>
+        <a href="cartelas.html" class="nav-item">🖨️ Gerador de Cartelas</a>
+        <a href="guia.html" class="nav-item">📖 Guia Completo</a>
+        <a href="cantadas.html" class="nav-item">🗣️ Cantadas de Bingo</a>
+        <a href="sobre.html" class="nav-item">ℹ️ Sobre</a>
     </div>
+</nav>
 
-    <main class="main-content">
-        <div id="painelJogo">
-            <div class="resumo-config" id="resumoConfig">
-                <span><strong>Modo:</strong> <span id="resumoModo"></span></span>
-                <span><strong>Bolas:</strong> <span id="resumoQuantidade"></span></span>
-                <span><strong>Som:</strong> <span id="resumoSom"></span></span>
-                <span><strong>Tema:</strong> <span id="resumoTema"></span></span>
-                <span><strong>Repete:</strong> <span id="resumoRepetir"></span></span>
-                <button class="botao-engrenagem" id="btnAbrirConfiguracoes" type="button">⚙ Configurações</button>
+<div class="portal-container">
+
+    <!-- Janela do Jogo Interativo -->
+    <main class="app-window" id="appWindow">
+        
+        <!-- Barra de Ferramentas / Ações Rápidas -->
+        <div class="barra-ferramentas-jogo">
+            <div class="grupo-botoes-ferramentas">
+                <button type="button" id="btnAlternarVoz" class="btn-ferramenta ativo" title="Ativar ou desativar locução de voz">🗣️ Voz: <strong id="statusVozTexto">Ligada</strong></button>
+                <button type="button" id="btnAlternarTabelaMestre" class="btn-ferramenta ativo" title="Exibir ou ocultar tabela de conferência">📋 Tabela Mestre</button>
+                <button type="button" id="btnTelaCheia" class="btn-ferramenta" title="Expandir para TV ou Projetor">📺 Tela Cheia</button>
+                <button type="button" id="btnCompartilhar" class="btn-ferramenta" title="Compartilhar no WhatsApp ou grupo">📤 Compartilhar</button>
+            </div>
+            <div class="grupo-botoes-ferramentas">
+                <button type="button" id="btnInstalarApp" class="btn-ferramenta oculto" title="Instalar aplicativo no celular ou PC">📲 Instalar App</button>
+                <button type="button" id="btnAbrirConfiguracoes" class="btn-ferramenta" title="Configurar regras, modo e tema">⚙️ Configurações</button>
+            </div>
+        </div>
+
+        <!-- Resumo das Preferências Atuais -->
+        <div class="resumo-config" id="resumoConfig">
+            <span>Modo: <strong id="resumoModo">Manual</strong></span>
+            <span>·</span>
+            <span>Bolas: <strong id="resumoQuantidade">75</strong></span>
+            <span>·</span>
+            <span>Som: <strong id="resumoSom">Clássico</strong></span>
+            <span>·</span>
+            <span>Tema: <strong id="resumoTema">Âmbar</strong></span>
+            <span>·</span>
+            <span>Repetição: <strong id="resumoRepetir">Não</strong></span>
+        </div>
+
+        <!-- Painel Central do Sorteio -->
+        <div class="painel-colunas" id="painelJogo">
+            
+            <!-- Coluna Esquerda: Sorteador e Bola -->
+            <div class="coluna-esquerda">
+                <div id="rodadaTexto">Globo pronto!</div>
+                <div class="bola-bingo" id="numeroSorteado" aria-live="polite">--</div>
+                <div class="contador-restante" id="contadorRestante">
+                    Restam: <span id="numerosFaltando">75</span> / <span id="totalBolasLabel">75</span>
+                </div>
+                <div class="status" id="statusAnimacao" aria-live="polite"></div>
+                <div id="areaControles"></div>
             </div>
 
-            <div class="painel-colunas">
-                <div class="coluna-esquerda">
-                    <div id="rodadaTexto">Gire o Globo!</div>
-                    <div class="bola-bingo" id="numeroSorteado" aria-live="polite">--</div>
-                    <div class="contador-restante" id="contadorRestante">Restam: <span id="numerosFaltando">75</span> / <span id="totalBolasLabel">75</span></div>
-                    <div class="status" id="statusAnimacao" aria-live="polite"></div>
-                    <div id="areaControles">
-                        <button id="btnAcao" type="button">Sortear Número</button>
-                    </div>
-                </div>
-
-                <div class="coluna-direita">
-                    <h3>Histórico das Rodadas</h3>
-                    <div class="historico-container" id="historicoContainer">
-                        <div id="itemVazio" class="historico-vazio">
-                            Nenhuma bola sorteada neste painel ainda.
-                        </div>
-                    </div>
+            <!-- Coluna Direita: Histórico -->
+            <div class="coluna-direita">
+                <h3>
+                    <span>Histórico das Pedras</span>
+                    <button type="button" id="btnCopiarHistorico" class="btn-secundario" style="font-size: 11px; padding: 3px 8px;" title="Copiar números sorteados">📋 Copiar</button>
+                </h3>
+                <div class="historico-container" id="historicoContainer" aria-label="Histórico de números sorteados">
+                    <div id="itemVazio" class="historico-vazio">Nenhuma bola sorteada neste painel ainda.</div>
                 </div>
             </div>
         </div>
+
+        <!-- Tabela Mestre de Conferência B-I-N-G-O (Master Board) -->
+        <section class="secao-tabela-mestre" id="secaoTabelaMestre">
+            <div class="cabecalho-tabela-mestre">
+                <h3>📋 Tabela Mestre de Conferência</h3>
+                <span style="font-size: 11px; color: var(--text-muted);">As pedras sorteadas acendem automaticamente em dourado</span>
+            </div>
+            <div class="grade-tabela-mestre" id="gradeTabelaMestre">
+                <!-- Linhas geradas dinamicamente via JS -->
+            </div>
+        </section>
+
     </main>
+
+    <!-- Bloco de Anúncio Seguro e Conforme com Políticas do Google AdSense -->
+    <div class="bloco-publicidade-conteudo">
+        <span class="rotulo-publicidade">PUBLICIDADE</span>
+        <div class="ad-slot" style="margin: 0 auto; max-width: 728px;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4761972367670674"
+                 data-ad-slot="9353937331"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+        </div>
+    </div>
+
+    <!-- Seção Editorial Completa (Garante Alto Valor de Conteúdo e Aprovação no AdSense) -->
+    <section class="bloco-editorial">
+        <h2>Como Funciona o Sorteador de Bingo Online Bingo Pro</h2>
+        <p>O <strong>Bingo Pro</strong> é um sorteador eletrônico gratuito e moderno projetado para substituir o globo tradicional com total praticidade, transparência e segurança. Ideal para festas juninas, encontros familiares, bingos beneficentes, escolas, igrejas e eventos corporativos.</p>
+
+        <h3>Principais Recursos do Bingo Pro</h3>
+        <ul>
+            <li><strong>Locutor com Voz em Português:</strong> Anuncia as pedras e letras automaticamente através da síntese de voz nativa do seu navegador, eliminando o cansaço do locutor.</li>
+            <li><strong>Tabela Mestre de Conferência em Tempo Real:</strong> Um painel visual com todas as pedras de 1 a 75 (ou 1 a 90) que acende em dourado cada número que já saiu, tornando a conferência de cartelas vencedoras instantânea e à prova de falhas.</li>
+            <li><strong>Modos Manual e Automático:</strong> Controle o ritmo da partida clicando em "Sortear" ou configure um cronômetro automático de 5 a 120 segundos para o sorteador rodar sozinho enquanto você também joga.</li>
+            <li><strong>Suporte a 75 e 90 Bolas (e Personalizado):</strong> Jogue com as regras do Bingo Americano de 75 bolas, Bingo Tradicional de 90 bolas, Bingo Rápido de 30 bolas ou qualquer quantidade entre 10 e 200 pedras.</li>
+            <li><strong>Modo Tela Cheia para TV e Projetor:</strong> Otimizado para ser espelhado em Smart TVs e projetores de festas com um único clique.</li>
+            <li><strong>Gerador de Cartelas Gratuito:</strong> Crie e imprima dezenas de cartelas de bingo sem números repetidos usando nosso <a href="cartelas.html">Gerador de Cartelas em PDF</a>.</li>
+        </ul>
+
+        <h3>Passo a Passo: Como Jogar Bingo com o Bingo Pro</h3>
+        <ol>
+            <li><strong>Imprima as Cartelas:</strong> Acesse nossa aba de <a href="cartelas.html">Gerador de Cartelas</a> e imprima a quantidade necessária para os jogadores.</li>
+            <li><strong>Configure a Partida:</strong> Clique no ícone de engrenagem <em>"⚙️ Configurações"</em> e escolha a quantidade de bolas (75 ou 90) e o modo de sorteio desejado.</li>
+            <li><strong>Projete na Tela:</strong> Conecte seu celular, tablet ou notebook à TV da sala e clique no botão <em>"📺 Tela Cheia"</em>.</li>
+            <li><strong>Sorteie e Divirta-se:</strong> Clique em <em>"Sortear Número"</em> ou ative o modo automático. O locutor eletrônico anunciará as pedras em voz alta.</li>
+            <li><strong>Confira o Vencedor:</strong> Quando alguém gritar "BINGO!", consulte a <em>Tabela Mestre</em> para checar os números sorteados em segundos.</li>
+        </ol>
+    </section>
+
+    <!-- Accordion de Perguntas Frequentes (FAQ) -->
+    <section class="bloco-editorial secao-faq">
+        <h2>Perguntas Frequentes sobre o Bingo Pro</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-pergunta" onclick="alternarFaq(this)">
+                    <span>O sorteio é realmente justo e aleatório?</span>
+                    <span class="faq-icone">▼</span>
+                </div>
+                <div class="faq-resposta">
+                    Sim! O Bingo Pro utiliza o gerador pseudoaleatório nativo do navegador baseado em fontes de entropia do sistema operacional. Cada bola sorteada é imediatamente removida do globo virtual, garantindo que não haja repetições e que todas as pedras tenham chances idênticas.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pergunta" onclick="alternarFaq(this)">
+                    <span>Preciso de conexão com a internet para jogar?</span>
+                    <span class="faq-icone">▼</span>
+                </div>
+                <div class="faq-resposta">
+                    Não após a primeira visita! O Bingo Pro é um Progressive Web App (PWA). Todos os arquivos necessários (sons, visual, lógica e voz) ficam salvos no seu navegador, permitindo realizar sorteios mesmo em chácaras, salões de festas ou locais sem sinal de Wi-Fi ou dados móveis.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pergunta" onclick="alternarFaq(this)">
+                    <span>Como ativar a voz do locutor?</span>
+                    <span class="faq-icone">▼</span>
+                </div>
+                <div class="faq-resposta">
+                    A voz já vem ativada por padrão. Você pode ligar ou desligar a locução a qualquer momento clicando no botão <strong>"🗣️ Voz: Ligada"</strong> na barra superior do jogo.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pergunta" onclick="alternarFaq(this)">
+                    <span>Como imprimir cartelas de bingo gratuitamente?</span>
+                    <span class="faq-icone">▼</span>
+                </div>
+                <div class="faq-resposta">
+                    Clique no link <a href="cartelas.html"><strong>Gerador de Cartelas</strong></a> no menu superior. Escolha o número de cartelas, o formato (75 ou 90 bolas) e clique em "Imprimir / Salvar PDF". As cartelas são geradas com numeração aleatória e prontas para recortar.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pergunta" onclick="alternarFaq(this)">
+                    <span>O Bingo Pro cobra alguma taxa ou exige cadastro?</span>
+                    <span class="faq-icone">▼</span>
+                </div>
+                <div class="faq-resposta">
+                    Não. O Bingo Pro é 100% gratuito, sem planos pagos, sem compras no aplicativo e sem necessidade de cadastro, login ou fornecimento de e-mail.
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>
 
-<footer class="app-footer">
-    <button class="link-botao oculto" id="btnInstalarApp" type="button">📲 Instalar App</button>
-    <span class="footer-separador oculto" id="separadorInstalar">·</span>
-    <a class="link-botao" href="guia.html">Guia do Bingo</a>
-    <span class="footer-separador">·</span>
-    <button class="link-botao" id="btnAbrirSobre" type="button">Sobre</button>
-    <span class="footer-separador">·</span>
-    <button class="link-botao" id="btnAbrirPrivacidade" type="button">Privacidade</button>
-    <span class="footer-separador">·</span>
-    Desenvolvido por <strong>Guntzel Tech</strong>
+<!-- Rodapé do Site -->
+<footer class="rodape-site">
+    <div class="footer-links">
+        <a href="index.html">Sorteador</a> ·
+        <a href="cartelas.html">Gerador de Cartelas</a> ·
+        <a href="guia.html">Guia do Bingo</a> ·
+        <a href="cantadas.html">Cantadas de Bingo</a> ·
+        <a href="sobre.html">Sobre</a> ·
+        <a href="privacidade.html">Política de Privacidade</a> ·
+        <a href="termos.html">Termos de Uso</a>
+    </div>
+    <p style="margin-top: 8px;">Bingo Pro · Desenvolvido por <strong>Guntzel Tech</strong> · 2026</p>
 </footer>
 
+<!-- Modais da Aplicação -->
+
+<!-- Modal de Configurações -->
 <div class="modal-overlay" id="modalConfiguracoes" role="dialog" aria-modal="true" aria-labelledby="modalConfiguracoesTitulo">
     <div class="modal-box">
-        <h2 id="modalConfiguracoesTitulo">Configurações do Sorteio</h2>
+        <h2 id="modalConfiguracoesTitulo">⚙ Configurações da Partida</h2>
 
         <div class="config-grupo">
-            <span class="config-label">Modo de sorteio</span>
+            <span class="config-label">Modo de Sorteio</span>
             <div class="config-opcoes" id="grupoModo">
                 <label class="radio-chip"><input type="radio" name="modo" value="manual" checked> Manual</label>
                 <label class="radio-chip"><input type="radio" name="modo" value="automatico"> Automático</label>
@@ -137,18 +316,18 @@
         </div>
 
         <div class="config-grupo">
-            <label class="config-label" for="seletorQuantidade">Quantidade de bolas</label>
+            <label class="config-label" for="seletorQuantidade">Quantidade de Bolas no Globo</label>
             <select id="seletorQuantidade" class="config-select">
-                <option value="30">30 bolas (Bingo rápido)</option>
-                <option value="75" selected>75 bolas (Bingo tradicional)</option>
-                <option value="90">90 bolas (Bingo europeu)</option>
-                <option value="manual">Outro (digitar valor)</option>
+                <option value="30">30 bolas (Bingo Rápido)</option>
+                <option value="75" selected>75 bolas (Bingo Americano Tradicional)</option>
+                <option value="90">90 bolas (Bingo Europeu / Tradicional)</option>
+                <option value="manual">Personalizado (de 10 a 200 bolas)</option>
             </select>
-            <input type="number" id="inputQuantidadeManual" class="config-select oculto" min="10" max="200" step="1" placeholder="Digite de 10 a 200" aria-label="Quantidade de bolas, de 10 a 200">
+            <input type="number" id="inputQuantidadeManual" class="config-select oculto" min="10" max="200" step="1" placeholder="Digite entre 10 e 200 bolas" aria-label="Quantidade personalizada de bolas, de 10 a 200">
         </div>
 
         <div class="config-grupo">
-            <label class="config-label" for="seletorSom">Som</label>
+            <label class="config-label" for="seletorSom">Perfil de Efeito Sonoro</label>
             <select id="seletorSom" class="config-select">
                 <option value="classico" selected>Clássico</option>
                 <option value="cassino">Cassino</option>
@@ -159,59 +338,81 @@
         </div>
 
         <div class="config-grupo">
-            <label class="config-label" for="seletorTema">Tema (cor)</label>
+            <label class="config-label" for="seletorTema">Tema Visual (Cor de Destaque)</label>
             <select id="seletorTema" class="config-select">
-                <option value="ambar" selected>Âmbar (padrão)</option>
-                <option value="azul">Azul</option>
-                <option value="verde">Verde</option>
-                <option value="roxo">Roxo</option>
-                <option value="vermelho">Vermelho</option>
+                <option value="ambar" selected>Âmbar (Dourado Padrão)</option>
+                <option value="azul">Azul Oceano</option>
+                <option value="verde">Verde Esmeralda</option>
+                <option value="roxo">Roxo Festivo</option>
+                <option value="vermelho">Vermelho Rubi</option>
             </select>
         </div>
 
         <div class="config-grupo">
             <span class="config-label">Repetir números sorteados?</span>
             <div class="config-opcoes" id="grupoRepetir">
-                <label class="radio-chip"><input type="radio" name="repetir" value="nao" checked> Não</label>
-                <label class="radio-chip"><input type="radio" name="repetir" value="sim"> Sim</label>
+                <label class="radio-chip"><input type="radio" name="repetir" value="nao" checked> Não (Padrão de Bingo)</label>
+                <label class="radio-chip"><input type="radio" name="repetir" value="sim"> Sim (Sorteios Livres)</label>
             </div>
         </div>
 
         <button id="btnAplicarConfiguracoes" type="button">Aplicar e Reiniciar Sorteio</button>
-        <button id="btnFecharConfiguracoes" type="button" class="btn-secundario">Cancelar</button>
+        <button id="btnFecharConfiguracoes" type="button" class="btn-secundario" style="width: 100%; margin-top: 8px;">Cancelar</button>
     </div>
 </div>
 
+<!-- Modal de Compartilhar / QR Code -->
+<div class="modal-overlay" id="modalCompartilhar" role="dialog" aria-modal="true" aria-labelledby="modalCompartilharTitulo">
+    <div class="modal-box" style="text-align: center;">
+        <h2 id="modalCompartilharTitulo">📤 Compartilhar Bingo Pro</h2>
+        <p>Convide seus amigos e familiares para acompanhar a rodada ou gerar cartelas:</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+            <a id="btnShareWhatsapp" href="#" target="_blank" class="botao-link" style="background: #25D366; color: #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 700;">💬 Enviar no WhatsApp</a>
+            <a id="btnShareTelegram" href="#" target="_blank" class="botao-link" style="background: #0088cc; color: #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 700;">✈️ Enviar no Telegram</a>
+            <button type="button" id="btnCopiarLinkApp" class="btn-secundario">📋 Copiar Link do Site</button>
+        </div>
+
+        <button id="btnFecharCompartilhar" type="button" class="btn-modal-acao">Fechar ✓</button>
+    </div>
+</div>
+
+<!-- Modal Sobre -->
 <div class="modal-overlay" id="modalSobre" role="dialog" aria-modal="true" aria-labelledby="modalSobreTitulo">
-    <div class="modal-box modal-sobre">
+    <div class="modal-box modal-sobre" style="text-align: center;">
         <h2 id="modalSobreTitulo">🎱 Sobre o Bingo Pro</h2>
-        <p>Bingo Pro é um sorteador eletrônico de bingo gratuito, feito para ser simples e direto: escolha o modo manual ou automático, a quantidade de bolas (30, 75, 90 ou um valor entre 10 e 200), o som e o tema de cor, e comece a sortear.</p>
-        <p>Todo o jogo roda no seu navegador, sem instalação e sem necessidade de conta. Depois da primeira visita, o Bingo Pro continua funcionando mesmo sem internet.</p>
+        <p>O <strong>Bingo Pro</strong> é um sorteador eletrônico de bingo gratuito, acessível e rápido desenvolvido por <strong>Guntzel Tech</strong> para animar partidas em família, quermesses, igrejas e empresas.</p>
+        <p>Todo o jogo roda localmente no seu navegador, sem necessidade de download ou cadastro, e funciona offline.</p>
         <button id="btnFecharSobre" type="button" class="btn-modal-acao">Entendi ✓</button>
     </div>
 </div>
 
+<!-- Modal de Privacidade -->
 <div class="modal-overlay" id="modalPrivacidade" role="dialog" aria-modal="true" aria-labelledby="modalPrivacidadeTitulo">
-    <div class="modal-box modal-privacidade">
-        <h2 id="modalPrivacidadeTitulo">🔒 Sua Privacidade é Importante</h2>
-        <p class="intro-privacidade">Bingo Pro foi desenvolvido respeitando a privacidade de cada jogador. Aqui está o que fazemos:</p>
-
-        <ul class="lista-privacidade">
-            <li>✓ Sem login, senha ou cadastro</li>
-            <li>✓ Sem coleta de localização</li>
-            <li>✓ Sem coleta de endereço IP</li>
-            <li>✓ Sem envio de dados a servidores</li>
-        </ul>
-
-        <p><strong>Dados Locais:</strong> Salvamos apenas suas preferências no navegador (modo, quantidade de bolas, som, tema). Esses dados nunca saem do seu dispositivo.</p>
-
-        <p><strong>Google AdSense:</strong> Este site usa Google AdSense para exibir anúncios. O Google utiliza cookies para fornecer anúncios relevantes. Você pode controlar essas preferências <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">aqui</a>.</p>
-
+    <div class="modal-box modal-privacidade" style="text-align: center;">
+        <h2 id="modalPrivacidadeTitulo">🔒 Sua Privacidade é Respeitada</h2>
+        <p>O Bingo Pro não coleta senhas, contas, e-mails ou dados confidenciais. Suas preferências de tema e modo ficam salvas apenas no seu navegador.</p>
+        <p>Saiba mais detalhes na nossa <a href="privacidade.html">Política de Privacidade Completa</a>.</p>
         <button id="btnFecharPrivacidade" type="button" class="btn-modal-acao">Entendi ✓</button>
     </div>
 </div>
 
 <script src="app.js"></script>
+
+<script>
+function alternarFaq(elemento) {
+    const item = elemento.parentElement;
+    const resposta = item.querySelector('.faq-resposta');
+    const icone = item.querySelector('.faq-icone');
+    if (resposta.style.display === 'none' || !resposta.style.display) {
+        resposta.style.display = 'block';
+        icone.innerText = '▲';
+    } else {
+        resposta.style.display = 'none';
+        icone.innerText = '▼';
+    }
+}
+</script>
 
 </body>
 </html>

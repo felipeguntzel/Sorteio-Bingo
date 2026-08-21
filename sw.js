@@ -1,8 +1,13 @@
-const CACHE_NAME = 'bingo-pro-v13';
+const CACHE_NAME = 'bingo-pro-v14';
 const ARQUIVOS_APP_SHELL = [
     './',
     './index.html',
+    './cartelas.html',
     './guia.html',
+    './cantadas.html',
+    './sobre.html',
+    './privacidade.html',
+    './termos.html',
     './styles.css',
     './app.js',
     './manifest.json',
