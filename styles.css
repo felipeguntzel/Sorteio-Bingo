@@ -563,32 +563,34 @@ button:disabled {
 }
 
 /* ========================================================
-   BLOCOS DE PUBLICIDADE (COMPLIANT COM GOOGLE ADSENSE)
+   ESPAÇOS RESERVADOS PARA ANÚNCIOS (PONTOS ESTRATÉGICOS)
    ======================================================== */
 .bloco-publicidade-conteudo {
     width: 100%;
-    margin: 20px auto;
+    margin: 24px auto;
     text-align: center;
+    min-height: 90px;
 }
 
 .rotulo-publicidade {
-    display: block;
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    opacity: 0.6;
+    display: none !important;
 }
 
 .ad-slot {
     width: 100%;
-    min-height: 60px;
-    max-height: 100px;
-    border: 1px dashed rgba(51, 65, 85, 0.6);
-    border-radius: 8px;
-    background: rgba(15, 23, 42, 0.2);
-    overflow: hidden;
+    max-width: 728px;
+    margin: 0 auto;
+    min-height: 90px;
+    display: block;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+ins.adsbygoogle {
+    display: block;
+    min-width: 250px;
+    min-height: 90px;
+    width: 100%;
 }
 
 /* ========================================================

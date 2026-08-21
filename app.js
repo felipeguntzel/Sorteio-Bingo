@@ -3,6 +3,33 @@
  * Guntzel Tech · 2026
  */
 
+// Tratamento de segurança contra erros de largura assíncrona do Google AdSense e ResizeObserver
+window.addEventListener('error', function (evento) {
+    const msg = (evento && (evento.message || (evento.error && evento.error.message))) || '';
+    if (
+        typeof msg === 'string' && (
+            msg.includes('ResizeObserver') ||
+            msg.includes('adsbygoogle') ||
+            msg.includes('availableWidth')
+        )
+    ) {
+        evento.preventDefault();
+        evento.stopImmediatePropagation();
+        return true;
+    }
+}, true);
+
+window.onerror = function (message, source, lineno, colno, error) {
+    const msg = (typeof message === 'string' ? message : '') + (error && error.message ? error.message : '');
+    if (
+        msg.includes('ResizeObserver') ||
+        msg.includes('adsbygoogle') ||
+        msg.includes('availableWidth')
+    ) {
+        return true;
+    }
+};
+
 let rodada = 1;
 let numeros = [];
 let sorteados = [];
@@ -850,28 +877,44 @@ window.addEventListener('appinstalled', () => {
     if (btnInstalar) btnInstalar.classList.add('oculto');
 });
 
-// Inicialização segura de anúncios do Google AdSense
-function inicializarAnuncios() {
-    const slots = document.querySelectorAll('ins.adsbygoogle');
-    slots.forEach(slot => {
-        if (slot.dataset.adLoaded === 'true') return;
-        const style = window.getComputedStyle(slot);
-        const parentStyle = slot.parentElement ? window.getComputedStyle(slot.parentElement) : null;
-        if (style.display !== 'none' && (!parentStyle || parentStyle.display !== 'none') && slot.offsetWidth > 0) {
-            try {
-                slot.dataset.adLoaded = 'true';
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-            } catch (e) {
-                console.warn('AdSense push skipped:', e);
-            }
+// Inicialização segura e resiliente de anúncios do Google AdSense
+function carregarSlotAnuncio(slot) {
+    if (!slot || slot.dataset.adLoaded === 'true' || slot.getAttribute('data-adsbygoogle-status')) return;
+
+    const parent = slot.parentElement || slot;
+    const rect = slot.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    const larguraDisponivel = Math.max(rect.width, parentRect.width, slot.offsetWidth, parent.offsetWidth);
+
+    if (larguraDisponivel >= 200 && window.getComputedStyle(slot).display !== 'none' && window.getComputedStyle(parent).display !== 'none') {
+        try {
+            slot.dataset.adLoaded = 'true';
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            // Silencia qualquer exceção sem interromper a execução
         }
+    }
+}
+
+function configurarAnunciosSeguros() {
+    const slots = document.querySelectorAll('ins.adsbygoogle');
+    if (!slots.length) return;
+
+    const tentar = () => {
+        slots.forEach(slot => carregarSlotAnuncio(slot));
+    };
+
+    tentar();
+    setTimeout(tentar, 400);
+    setTimeout(tentar, 1200);
+    window.addEventListener('load', tentar);
+    window.addEventListener('resize', () => {
+        setTimeout(tentar, 250);
     });
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inicializarAnuncios);
+    document.addEventListener('DOMContentLoaded', configurarAnunciosSeguros);
 } else {
-    inicializarAnuncios();
+    configurarAnunciosSeguros();
 }
-window.addEventListener('load', inicializarAnuncios);
-window.addEventListener('resize', inicializarAnuncios);
