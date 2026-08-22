@@ -30,17 +30,68 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "Guia Completo do Bingo: Como Jogar, Formatos de 75 e 90 Bolas e Dicas",
-      "description": "Tutorial completo com a história, regras, padrões vencedores e passos práticos para organizar um evento de bingo com sucesso.",
-      "author": {
-        "@type": "Organization",
-        "name": "Guntzel Tech"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "Bingo Pro"
-      }
+      "@graph": [
+        {
+          "@type": "Article",
+          "headline": "Guia Completo do Bingo: Como Jogar, Formatos de 75 e 90 Bolas e Dicas",
+          "description": "Tutorial completo com a história, regras, padrões vencedores e passos práticos para organizar um evento de bingo com sucesso.",
+          "author": {
+            "@type": "Organization",
+            "name": "Guntzel Tech"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Bingo Pro"
+          },
+          "mainEntityOfPage": "https://sorteio-bingo.pages.dev/guia.html"
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Qual é a diferença entre o Bingo de 75 Bolas e o de 90 Bolas?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "O Bingo de 75 Bolas (padrão americano) usa cartelas de 5x5 com 24 números e um espaço central livre (FREE), com as colunas B-I-N-G-O divididas de 15 em 15 números. O Bingo de 90 Bolas (padrão europeu/brasileiro) usa cartelas 3x9 com 15 números por cartela e permite premiações intermediárias por linha (Quina)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quais são os principais padrões de vitória no bingo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Os padrões mais populares são: Cartela Cheia (Bingo / Blackout), Linha Horizontal/Vertical/Diagonal, Quatro Cantos, Cruz/X e Moldura."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Como evitar fraudes ou conferir cartelas no bingo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use a tabela mestre de conferência do Bingo Pro. Quando um jogador gritar 'Bingo!', o organizador confere rapidamente se cada um dos números marcados na cartela já foi efetivamente sorteado no painel."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Início",
+              "item": "https://sorteio-bingo.pages.dev/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Guia Completo de Bingo",
+              "item": "https://sorteio-bingo.pages.dev/guia.html"
+            }
+          ]
+        }
+      ]
     }
     </script>
 </head>

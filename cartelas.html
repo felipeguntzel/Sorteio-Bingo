@@ -31,17 +31,66 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Gerador de Cartelas de Bingo Pro",
-      "url": "https://sorteio-bingo.pages.dev/cartelas.html",
-      "description": "Gerador gratuito de cartelas de bingo de 75 e 90 bolas para impressão em PDF ou papel A4.",
-      "applicationCategory": "GameApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "BRL"
-      }
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Gerador de Cartelas de Bingo Pro",
+          "url": "https://sorteio-bingo.pages.dev/cartelas.html",
+          "description": "Gerador gratuito de cartelas de bingo de 75 e 90 bolas para impressão em PDF ou papel A4.",
+          "applicationCategory": "GameApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "BRL"
+          }
+        },
+        {
+          "@type": "HowTo",
+          "name": "Como Gerar e Imprimir Cartelas de Bingo Personalizadas",
+          "description": "Passo a passo simples para gerar cartelas de bingo de 75 e 90 bolas prontas para imprimir em papel A4.",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "name": "Escolha o tipo de bingo",
+              "text": "Selecione entre o formato tradicional de 75 Bolas (grade 5x5) ou 90 Bolas (grade 3x9)."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Defina a quantidade de cartelas",
+              "text": "Escolha quantas cartelas deseja gerar (de 2 até 24 cartelas únicas por lote)."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Configure a impressão e o visual",
+              "text": "Escolha se deseja economizar tinta (modo preto e branco) e se quer exibir o título personalizado no topo de cada cartela."
+            },
+            {
+              "@type": "HowToStep",
+              "name": "Imprima ou salve em PDF",
+              "text": "Clique no botão 'Imprimir / Salvar em PDF' para enviar diretamente à impressora ou salvar o arquivo digital."
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Início",
+              "item": "https://sorteio-bingo.pages.dev/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Gerador de Cartelas",
+              "item": "https://sorteio-bingo.pages.dev/cartelas.html"
+            }
+          ]
+        }
+      ]
     }
     </script>
 </head>
