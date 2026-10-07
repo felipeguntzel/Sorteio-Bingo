@@ -25,8 +25,8 @@
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%231e293b%22 stroke=%22%23fbbf24%22 stroke-width=%226%22/><circle cx=%2245%22 cy=%2245%22 r=%2222%22 fill=%22%23ffffff%22/><text x=%2250%22 y=%2268%22 font-family=%22sans-serif%22 font-size=%2252%22 font-weight=%22900%22 fill=%22%23dc2626%22 text-anchor=%22middle%22>75</text></svg>">
 
-    <link rel="stylesheet" href="styles.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4761972367670674" crossorigin="anonymous"></script>
+    <script src="ads-consent.js" defer></script>
 
     <script type="application/ld+json">
     {
@@ -118,10 +118,12 @@
         <a href="bingo-educativo-sala-de-aula.html" class="nav-item">🎓 Bingo Educativo</a>
         <a href="cantadas.html" class="nav-item">🗣️ Cantadas</a>
         <a href="sobre.html" class="nav-item">ℹ️ Sobre</a>
+        <a href="contato.html" class="nav-item">✉️ Contato</a>
     </div>
 </nav>
 
 <div class="bloco-publicidade-conteudo">
+    <span class="rotulo-publicidade">PUBLICIDADE</span>
     <div class="ad-slot" style="margin: 0 auto; max-width: 728px;">
         <ins class="adsbygoogle"
              style="display:block"
@@ -231,8 +233,12 @@
         <a href="bingo-educativo-sala-de-aula.html">Bingo Educativo</a> ·
         <a href="cantadas.html">Cantadas</a> ·
         <a href="sobre.html">Sobre</a> ·
+        <a href="contato.html">Contato</a> ·
         <a href="privacidade.html">Privacidade</a> ·
         <a href="termos.html">Termos de Uso</a>
+    </div>
+    <div class="aviso-legal-jogos">
+        <p>⚠️ <strong>Aviso Legal & Finalidade Recreativa:</strong> O Bingo Pro é uma ferramenta utilitária independente desenvolvida estritamente para entretenimento familiar, encontros sociais, eventos escolares e beneficentes. Esta plataforma <strong>não realiza, não aceita e não intermedeia apostas com dinheiro real</strong> nem jogos de azar.</p>
     </div>
     <p style="margin-top: 10px;">Desenvolvido por <strong>Guntzel Tech</strong> · 2026</p>
 </footer>
@@ -341,76 +347,8 @@ document.getElementById('btnImprimirCartelas').addEventListener('click', () => {
     window.print();
 });
 
-// Previne e silencia erros assíncronos do AdSense quando o contêiner ainda não tem largura e avisos de ResizeObserver
-window.addEventListener('error', function (evento) {
-    const msg = (evento && (evento.message || (evento.error && evento.error.message))) || '';
-    if (
-        typeof msg === 'string' && (
-            msg.includes('ResizeObserver') ||
-            msg.includes('adsbygoogle') ||
-            msg.includes('availableWidth')
-        )
-    ) {
-        evento.preventDefault();
-        evento.stopImmediatePropagation();
-        return true;
-    }
-}, true);
-
-window.onerror = function (message, source, lineno, colno, error) {
-    const msg = (typeof message === 'string' ? message : '') + (error && error.message ? error.message : '');
-    if (
-        msg.includes('ResizeObserver') ||
-        msg.includes('adsbygoogle') ||
-        msg.includes('availableWidth')
-    ) {
-        return true;
-    }
-};
-
 // Inicializar na carga da página
 renderizarCartelas();
-
-function carregarSlotAnuncio(slot) {
-    if (!slot || slot.dataset.adLoaded === 'true' || slot.getAttribute('data-adsbygoogle-status')) return;
-
-    const parent = slot.parentElement || slot;
-    const rect = slot.getBoundingClientRect();
-    const parentRect = parent.getBoundingClientRect();
-    const larguraDisponivel = Math.max(rect.width, parentRect.width, slot.offsetWidth, parent.offsetWidth);
-
-    if (larguraDisponivel >= 200 && window.getComputedStyle(slot).display !== 'none' && window.getComputedStyle(parent).display !== 'none') {
-        try {
-            slot.dataset.adLoaded = 'true';
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-            // Silencia
-        }
-    }
-}
-
-function configurarAnunciosSeguros() {
-    const slots = document.querySelectorAll('ins.adsbygoogle');
-    if (!slots.length) return;
-
-    const tentar = () => {
-        slots.forEach(slot => carregarSlotAnuncio(slot));
-    };
-
-    tentar();
-    setTimeout(tentar, 400);
-    setTimeout(tentar, 1200);
-    window.addEventListener('load', tentar);
-    window.addEventListener('resize', () => {
-        setTimeout(tentar, 250);
-    });
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', configurarAnunciosSeguros);
-} else {
-    configurarAnunciosSeguros();
-}
 </script>
 
 </body>
