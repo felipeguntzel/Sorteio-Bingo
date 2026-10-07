@@ -1,11 +1,16 @@
-const CACHE_NAME = 'bingo-pro-v14';
+const CACHE_NAME = 'bingo-pro-v15';
 const ARQUIVOS_APP_SHELL = [
     './',
     './index.html',
     './cartelas.html',
     './guia.html',
+    './como-organizar-bingo.html',
+    './probabilidades-matematica-bingo.html',
+    './regras-padroes-bingo.html',
+    './bingo-educativo-sala-de-aula.html',
     './cantadas.html',
     './sobre.html',
+    './contato.html',
     './privacidade.html',
     './termos.html',
     './styles.css',
@@ -34,10 +39,25 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
-// Stale-while-revalidate: responde rápido com o cache (funciona offline) e
-// atualiza o cache em segundo plano sempre que houver internet disponível.
+// Stale-while-revalidate APENAS para recursos locais da própria aplicação
+// NUNCA interceptar ou armazenar requisições do Google AdSense, DoubleClick ou analíticas
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
+
+    try {
+        const url = new URL(event.request.url);
+        // Ignora domínios externos (especialmente Google AdSense, Google Syndication e DoubleClick)
+        if (
+            url.origin !== self.location.origin ||
+            url.hostname.includes('google') ||
+            url.hostname.includes('googlesyndication') ||
+            url.hostname.includes('doubleclick')
+        ) {
+            return;
+        }
+    } catch (e) {
+        return;
+    }
 
     event.respondWith(
         caches.match(event.request).then(respostaCache => {
